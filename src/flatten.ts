@@ -102,7 +102,7 @@ export class Flatten {
 		'ỷ': 'y',
 		'z': 'z',
 		'ẓ': 'z'
-	}
+	};
 	public squash(x: string): string {
 		return(deburr(x.normalize('NFC').toLowerCase()).replace(/[ɨⅱaắằẵẳặấầẫẩậǎảȃạªbcdḍeếềễểệẽẻẹəfgǵǧhḩḥiǐỉịjkḱlḷmnṅṇoốồỗổộỏọơớờỡởợºpqrṛṟsṡșṣtțṭṯuǔủụưứừữửựvwxyỳỹȳỷzẓ]/g, (y: string): string => {
 			return(this.exchage[y]); })
