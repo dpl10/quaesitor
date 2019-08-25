@@ -1,0 +1,64 @@
+{
+	"name": "quaesitor",
+	"version": "1.0.0",
+	"description": "a utility for finding Latin scientific within vernacular text",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "webpack --config webpack.config.js --mode production",
+		"build.all": "npm run build.prod && npm run build.esnext",
+		"build.esnext": "npm run build:types && npm run build:js",
+		"build.prod": "webpack --config webpack.config.js -p",
+		"build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
+		"build:types": "tsc --emitDeclarationOnly",
+		"lint": "tslint -p tsconfig.json",
+		"start": "webpack-dev-server --port 9000 --inline --progress --profile --colors --watch --content-base src/ --mode development",
+		"test": "karma start karma.config.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dpl10/quaesitor.git"
+	},
+	"author": "Damon P. Little",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/dpl10/quaesitor/issues"
+	},
+	"homepage": "https://github.com/dpl10/quaesitor#readme",
+	"devDependencies": {
+		"@babel/cli": "^7.2.3",
+		"@babel/core": "^7.4.0",
+		"@babel/plugin-proposal-class-properties": "^7.4.0",
+		"@babel/plugin-proposal-object-rest-spread": "^7.4.0",
+		"@babel/preset-env": "^7.4.1",
+		"@babel/preset-typescript": "^7.3.3",
+		"@types/jasmine": "^3.3.13",
+		"awesome-typescript-loader": "5.2.0",
+		"file-loader": "^4.2.0",
+		"jasmine-core": "~3.4.0",
+		"karma": "^4.1.0",
+		"karma-jasmine": "^2.0.1",
+		"karma-phantomjs-launcher": "1.0.4",
+		"karma-webpack": "3.0.0",
+		"source-map-loader": "0.2.3",
+		"tslint": "^5.19.0",
+		"tslint-loader": "3.6.0",
+		"typescript": "^3.5.0",
+		"webpack": "4.12.0",
+		"webpack-cli": "3.0.8",
+		"webpack-dev-server": "^3.8.0"
+	},
+	"files": [
+		"dist/*"
+	],
+	"dependencies": {
+		"@tensorflow/tfjs": "^1.2.6",
+		"@types/lodash": "^4.14.137",
+		"@types/node": "^12.7.2",
+		"@types/xregexp": "^3.0.30",
+		"lodash": "^4.17.15",
+		"mnemonist": "^0.30.0",
+		"xregexp": "^4.2.4",
+		"xxhash-wasm": "^0.3.1"
+	}
+}
