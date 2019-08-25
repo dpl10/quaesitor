@@ -57,6 +57,7 @@
 		"@types/node": "^12.7.2",
 		"@types/xregexp": "^3.0.30",
 		"lodash": "^4.17.15",
+		"mem": "^4.0.0",
 		"mnemonist": "^0.30.0",
 		"xregexp": "^4.2.4",
 		"xxhash-wasm": "^0.3.1"
