@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "a utility for finding Latin scientific within vernacular text",
 	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"types": "dist/src/index.d.ts",
 	"scripts": {
 		"build": "webpack --config webpack.config.js --mode production",
 		"build.all": "npm run build.prod && npm run build.esnext",

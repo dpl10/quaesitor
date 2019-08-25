@@ -34,7 +34,8 @@ module.exports = {
 		]
 	},
 	output: {
-		filename: '[name].bundle.js',
+		filename: 'index.js',
+		library: 'quaesitor',
 		path: DESTINATION
 	},
 	performance: {
