@@ -15,7 +15,7 @@ console.log(q.extractSpecies('Text with one or more Latin Scientific names, such
 If you use this software, please cite: Little, D.P. Submitted. Recognition of Latin scientific names using artificial neural networks. [Applications in Plant Sciences.](https://doi.org/ADD_DOI)
 
 ### license
-[MIT](https://github.com/dpl10/quaesitor/dpl10/blob/master/LICENSE)
+[MIT](https://github.com/dpl10/quaesitor/blob/master/LICENSE)
 
 ### related repositories
 * [quaesitor-cli](https://github.com/dpl10/quaesitor-cli)
