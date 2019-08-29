@@ -1,6 +1,6 @@
 {
 	"name": "quaesitor",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "a utility for finding Latin scientific within vernacular text",
 	"main": "dist/quaesitor-node.js",
 	"browser": "dist/quaesitor-browser.js",
