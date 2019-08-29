@@ -1,12 +1,12 @@
 /* imports from node_modules */
-import * as xxhash from 'xxhash-wasm/umd/xxhash-wasm';
-class XXhashType {
-	h32: Function = Function();
-	h64: Function = Function();
+const xxhash = require('xxhash-wasm/cjs/xxhash-wasm'); /* an import statement causes problems */
+interface XXhashType {
+	h32: Function;
+	h64: Function;
 }
 export class XXhash {
 	private loaded: boolean = false;
-	private xxh64: Function = Function();
+	private xxh64: Function;
 	constructor(){
 		this.load();
 	}
