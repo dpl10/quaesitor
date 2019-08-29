@@ -4,6 +4,7 @@
 		"allowUnreachableCode": false,
 		"alwaysStrict": true,
 		"declaration": true,
+		"experimentalDecorators": true,
 		"lib": [
 			"es2018",
 			"dom"

@@ -9,7 +9,7 @@ export class ScientificName extends Name {
 	protected static SInit = (() => {
 		ScientificName.prototype.extracted = false;
 	})();
-	public extracted: boolean = false;
+	public extracted: boolean;
 	public formatName(html: boolean = false): string {
 		let x: string = '';
 		if(this.hasOwnProperty('Genus') === true){
