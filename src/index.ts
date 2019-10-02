@@ -1,3 +1,3 @@
 /* imports/exports from module */
-export { Model } from './model';
+export { Classifiers } from './model';
 export { Quaesitor } from './quaesitor';

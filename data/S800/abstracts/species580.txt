@@ -1,0 +1,3 @@
+Complete genome sequences of three Erwinia amylovora phages isolated in north america and a bacteriophage induced from an Erwinia tasmaniensis strain. 
+
+Fire blight, a plant disease of economic importance caused by Erwinia amylovora, may be controlled by the application of bacteriophages. Here, we provide the complete genome sequences and the annotation of three E. amylovora-specific phages isolated in North America and genomic information about a bacteriophage induced by mitomycin C treatment of an Erwinia tasmaniensis strain that is antagonistic for E. amylovora. The American phages resemble two already-described viral genomes, whereas the E. tasmaniensis phage displays a singular genomic sequence in BLAST searches. 

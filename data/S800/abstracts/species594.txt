@@ -1,0 +1,3 @@
+Complete genome sequence of Corynebacterium pseudotuberculosis I19, a strain isolated from a cow in Israel with bovine mastitis. 
+
+This work reports the completion and annotation of the genome sequence of Corynebacterium pseudotuberculosis I19, isolated from an Israeli dairy cow with severe clinical mastitis. To present the whole-genome sequence, a de novo assembly approach using 33 million short (25-bp) mate-paired SOLiD reads only was applied. Furthermore, the automatic, functional, and manual annotations were attained with the use of several algorithms in a multistep process. 

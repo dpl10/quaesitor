@@ -1,0 +1,3 @@
+A new method for detection of pandemic influenza virus using High Resolution Melting analysis of the neuraminidase gene. 
+
+Diagnostic methods based upon exclusive detection of haemagglutinin do not detect sequence variation in other gene segments of the Influenza A virus. A complementary approach is described based upon high-resolution melting curve analysis of the neuraminidase gene, an approach with the potential ability to detect small changes in the neuraminidase sequence without the need for specific probes. 

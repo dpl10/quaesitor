@@ -1,0 +1,3 @@
+Proteotyping to establish the lineage of type A H1N1 and type B human influenza virus. 
+
+The ability to establish the lineage of type A H1N1 and type B human influenza virus strains using a new proteotyping approach is demonstrated. Lineage-specific signature peptides have been determined for the hemagglutinin antigen of type A H1N1 and type B influenza viruses. The detection of these peptides alone within the high resolution mass spectra of whole antigen digests enables the lineage of the strain to be rapidly and unequivocally assigned. This proteotyping approach complements conventional PCR approaches and should aid in the monitoring of the evolution of the influenza virus in both humans and animals. 

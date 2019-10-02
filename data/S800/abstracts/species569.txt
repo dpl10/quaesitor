@@ -1,0 +1,3 @@
+Mathematical models in the evaluation of health programmes.
+
+Modelling is valuable in the planning and evaluation of interventions, especially when a controlled trial is ethically or logistically impossible. Models are often used to calculate the expected course of events in the absence of more formal assessments. They are also used to derive estimates of rare or future events from recorded intermediate points. When developing models, decisions are needed about the appropriate level of complexity to be represented and about model structure and assumptions. The degree of rigor in model development and assessment can vary greatly, and there is a danger that existing beliefs inappropriately influence judgments about model assumptions and results. 

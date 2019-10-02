@@ -1,0 +1,3 @@
+Opposing contributions of polynucleotide phosphorylase and the membrane protein NlpI to biofilm formation by Salmonella enterica serovar Typhimurium. 
+
+CsgD and cyclic-3',5'-di-guanylate are key regulators of biofilm formation in Salmonella enterica serovar Typhimurium. Our results show that polynucleotide phosphorylase and NlpI oppositely altered expression of CsgD. Polynucleotide phosphorylase and NlpI also had opposite effects on the expression of yjcC, which codes for a cyclic-3',5'-di-guanylate phosphodiesterase affecting CsgD expression. 

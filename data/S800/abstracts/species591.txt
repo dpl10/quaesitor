@@ -1,0 +1,3 @@
+Complete genome sequence of strain HTCC2503T of Parvularcula bermudensis, the type species of the order Parvularculales in the class Alphaproteobacteria. 
+
+The order Parvularculales represents the seventh order in the class Alphaproteobacteria. Parvularcula bermudensis, the type species of the order, was isolated from the Sargasso Sea using dilution-to-extinction culturing. We present here the complete genome sequence of Parvularcula bermudensis HTCC2503(T), which contains genes for carotenoid biosynthesis, dimethylsulfoniopropionate demethylase, and transduction-like gene transfer agents. 

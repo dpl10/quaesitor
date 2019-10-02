@@ -1,0 +1,3 @@
+Distinct roles of multiple NDH-1 complexes in the cyanobacterial electron transport network as revealed by kinetic analysis of P700+ reduction in various Ndh-deficient mutants of Synechocystis sp. strain PCC6803. 
+
+While methyl viologen had only a small effect on P700(+) rereduction kinetics after far-red pulses in KCN-treated wild-type Synechocystis sp. strain PCC6803 and an NdhF3/NdhF4 (NdhF3/F4)-defective mutant, it involved a rather slow P700(+) rereduction in an NdhF1-defective mutant. This strongly indicates that (i) active electron flow from metabolites to plastoquinone is suppressed upon deletion of ndhF1 and (ii) photosystem 1-mediated cyclic electron transport is dependent on NdhF3/F4-type NDH-1 complexes. 

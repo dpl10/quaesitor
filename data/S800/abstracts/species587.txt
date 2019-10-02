@@ -1,0 +1,3 @@
+Cadherin domains in the polysaccharide-degrading marine bacterium Saccharophagus degradans 2-40 are carbohydrate-binding modules. 
+
+The complex polysaccharide-degrading marine bacterium Saccharophagus degradans strain 2-40 produces putative proteins that contain numerous cadherin and cadherin-like domains involved in intercellular contact interactions. The current study reveals that both domain types exhibit reversible calcium-dependent binding to different complex polysaccharides which serve as growth substrates for the bacterium. 

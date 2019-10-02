@@ -1,0 +1,3 @@
+Genome sequence of strain HTCC2083, a novel member of the marine clade Roseobacter. 
+
+Strain HTCC2083 was isolated from Oregon seawater using dilution-to-extinction culturing and represents a novel member of the Roseobacter clade. The draft genome sequence of HTCC2083 is presented here. The genome is predicted to contain genes for aerobic anoxygenic phototrophy, sulfite-oxidizing chemolithotrophy, anapleurotic CO(2) fixation, carbon monoxide oxidation, and dimethylsulfoniopropionate (DMSP) utilization. 

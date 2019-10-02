@@ -1,0 +1,3 @@
+Complete genome sequence of Bifidobacterium bifidum S17.
+
+Here, we report on the first completely annotated genome sequence of a Bifidobacterium bifidum strain. B. bifidum S17, isolated from feces of a breast-fed infant, was shown to strongly adhere to intestinal epithelial cells and has potent anti-inflammatory activity in vitro and in vivo. The genome sequence will provide new insights into the biology of this potential probiotic organism and allow for the characterization of the molecular mechanisms underlying its beneficial properties. 

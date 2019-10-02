@@ -1,0 +1,3 @@
+Completing the purine utilisation pathway of Aspergillus nidulans.
+
+We have previously identified by classical genetics and biochemistry, all the genes of Aspergillus nidulans predicted to be involved in purine utilisation, together with cognate regulatory genes and one gene encoding a novel xanthine hydroxylation activity. In this article we complete the description of the purine utilisation pathway with the identification of the two genes (uaX and uaW) encoding the enzymes catalysing the conversion of the product of urate oxidation by urate oxidase, 5-hydroxyisourate, to optically active allantoin. The identification of these additional genes confirms the complete absence of clustering of the genes involved in purine utilisation in A. nidulans. 

@@ -1,107 +1,132 @@
 /* imports from node_modules */
 const LRUCache = require('mnemonist/lru-cache'); /* an import statement causes problems */
 /* imports from module */
-import { Flatten } from './flatten';
-import { Model } from './model';
-import { Network } from './network';
-import { RegularExpression, exclusionSet, dash, html, separator } from './regular-expression';
+import { Classifier } from './classifier';
+import { Classifiers } from './model';
+import { Extractor } from './extractor';
+import { RegularExpression } from './regular-expression';
 import { ScientificName } from './scientific-name';
 import { XXhash } from './xxhash';
 export class Quaesitor {
-	private flatten: Flatten = new Flatten();
-	private network: Network = new Network();
-	private queryCache = new LRUCache(8192); /* LRUCache<string, boolean> */
+	private classifier: Classifier = new Classifier();
+	private extract: Extractor = new Extractor();
+	private queryCacheBinomial = new LRUCache(8192); /* LRUCache<string, boolean> */
+	private queryCacheUninomial = new LRUCache(8192); /* LRUCache<string, boolean> */
 	private regularExpression: RegularExpression = new RegularExpression();
 	private xxhash: XXhash = new XXhash();
 	constructor(){
 	}
+	private alpha(x: string, y: string): number {
+		if(x < y){
+			return(-1);
+		} else if(x > y){
+			return(1);
+		} else {
+			return(0);
+		}
+	}
 	public async extractSpecies(x: string, htmlFormat: boolean): Promise<Array<string>> {
-		const taxa: Array<ScientificName> = [];
-		const y = x.normalize('NFC').replace(html, '').replace(dash, '-').replace(/-+/g, '-').replace(/ -\n/g, ' - ').replace(/-\n/g, '').replace(separator, ' ').replace(/\r\n|\r|\n/g, ' ').replace(/ +/g, ' ').split(/ /);
-		for(let k = y.length-1; k >= 0; k--){
-			if((y[k] != null) && (exclusionSet.test(y[k]) === false)){ /* removes all non-Latin languages from consideration */
-				let z: ScientificName = new ScientificName();
-				let max: number = 20; /* assuming a max of three authors (four tokens): Genus(1) species(2) author(3-6) subsp.(7) subspecies(8) author(9-12) var.(13) variety(14) author(15-18) f.(19) forma(20) */
-				if((y.length-k) < max){
-					max = y.length-1;
-				} else {
-					max += k;
-				}
-				for(let j = max; j > k; j--){
-					if((y[j] === 'subsp.') || (y[j] === 'var.') || (y[j] === 'f.') || (y[j] === 'fm.')){
-						z = this.regularExpression.scientificNameExtract(y.slice(k, j+2).join(' '));
-						break;
+		const a: any = {};
+		const h: any = {};
+		let m: RegExpExecArray|null;
+		const u: Array<string> = [];
+		const y = x.normalize('NFC').replace(this.regularExpression.html, '').replace(this.regularExpression.lineEnding, '\n').replace(this.regularExpression.separator, ' ').replace(this.regularExpression.dash, '-').replace(/-+/g, '-').replace(/ -\n/g, ' - ').replace(/-\n/g, '').replace(/\n/g, ' ').replace(/ +/g, ' ');
+		while((m = this.regularExpression.nomenNudem.exec(y)) !== null){
+			const g = this.regularExpression.abbreviatedGenus(m[1]);
+			const s = this.regularExpression.abbreviatedSpecies(m[2]);
+			let n: ScientificName = new ScientificName();
+			const q = y.substr(m.index);
+			if((g === true) && (s === true)){
+				n = this.extract.scientificName(q);
+				if(n.extracted === true){
+					if((n.hasOwnProperty('Genus') === true) && (a.hasOwnProperty(n.Genus) === true)){
+						n.Genus = a[n.Genus];
 					}
-				}
-				if(z.extracted === false){
-					z = this.regularExpression.scientificNameExtract(y.slice(k, k+3).join(' '));
-					if(z.extracted === false){
-						z = this.regularExpression.scientificNameExtract(y.slice(k, k+2).join(' '));
-					}
-				}
-				if(z.extracted === true){
-					let insert: boolean = true;
-					for(const name in z){
-						if((name === 'Genus') && (this.regularExpression.abbreviatedGenus(z.Genus) === true)){
-							continue;
-						} else if(((name === 'Genus') || (name === 'species')) && (await this.query(z[name]) === false)){
-							insert = false;
-							break;
-						} else if(((name === 'forma') || (name === 'subspecies') || (name === 'variety')) && (await this.query(z[name]) === false)){
-							delete(z[name]);
+					if((n.extracted === true) && (n.hasOwnProperty('Genus') === true) && (n.hasOwnProperty('species') === true)){
+						const sp = this.formatSpecies(n.Genus, n.species);
+						if(a.hasOwnProperty(sp) === true){
+							n.species = a[sp];
 						}
 					}
-					if(insert === true){
-						taxa.push(z);
-					} else {
+				}
+			} else if(g === true){
+				if(await this.queryUninomial(m[2]) === true){
+					n = this.extract.scientificName(q);
+					if((n.extracted === true) && (n.hasOwnProperty('Genus') === true) && (a.hasOwnProperty(n.Genus) === true)){
+						n.Genus = a[n.Genus];
+					}
+				}
+			} else if(s === true){
+				if(await this.queryUninomial(m[1]) === true){
+					n = this.extract.scientificName(q);
+					if((n.extracted === true) && (n.hasOwnProperty('Genus') === true) && (n.hasOwnProperty('species') === true)){
+						const sp = this.formatSpecies(n.Genus, n.species);
+						if(a.hasOwnProperty(sp) === true){
+							n.species = a[sp];
+						}
+					}
+				}
+			} else if(await this.queryBinomial(m[1], m[2]) === true){
+				n = this.extract.scientificName(q);
+				if((n.extracted === true) && (n.hasOwnProperty('Genus') === true) && (n.hasOwnProperty('species') === true)){
+					const lg = n.Genus.length-1;
+					const ls = n.species.length-1;
+					for(let k = 3; k > 0; k--){
+						let kg = k;
+						let ks = k;
+						if(lg < k){
+							kg = lg;
+						}
+						if(ls < k){
+							ks = ls;
+						}
+						const ge: string = n.Genus.substring(0, kg) + '.';
+						const sp: string = n.species.substring(0, ks) + '.';
+						a[ge] = n.Genus;
+						a[this.formatSpecies(n.Genus, sp)] = n.species;
+						a[this.formatSpecies(ge, sp)] = n.species;
 					}
 				}
 			}
-		}
-		let currentGenus: string = '';
-		let currentGenusAbbreviated: RegExp = new RegExp(/^[]/);
-		const h: any = {};
-		const uniq: Array<string> = [];
-		for(let k = taxa.length-1; k >= 0; k--){
-			if(this.regularExpression.abbreviatedGenus(taxa[k].Genus) === true){
-				if((currentGenus.length > 0) && (currentGenusAbbreviated.test(taxa[k].Genus) === true)){
-					taxa[k].Genus = currentGenus;
+			if(n.extracted === true){
+				for(const p in n){
+					if(((p === 'forma') || (p === 'subspecies') || (p === 'variety')) && (await this.queryUninomial(n[p]) === false)){
+						delete(n[p]);
+					}
 				}
-			} else {
-				currentGenus = taxa[k].Genus;
-				let r: string = '^' + taxa[k].Genus.charAt(0) + taxa[k].Genus.charAt(1) + '{0,1}';
-				if(taxa[k].Genus.length >= 3){
-					r += taxa[k].Genus.charAt(2) + '{0,1}';
+				const f: string = n.formatName(htmlFormat);
+				const h64: string = await this.xxhash.h64(f);
+				if(h.hasOwnProperty(h64) === false){
+					h[h64] = true;
+					u.push(f);
 				}
-				currentGenusAbbreviated = new RegExp(r + '\.$');
-			}
-			const t: string = taxa[k].formatName(htmlFormat);
-			const h64: string = await this.xxhash.h64(t);
-			if(h[h64] === undefined){
-				h[h64] = true;
-				uniq.push(t);
 			}
 		}
-		return(uniq);
+// test all found genera or species to get additional compbinations species using more permissive threshold?
+		return(u.sort(this.alpha));
 	}
-	public async loadNetworks(x: Model): Promise<void> {
-		this.network.load(x);
+	private formatSpecies(g: string, s: string): string {
+		return(g + ' ' + s);
 	}
-	private async query(x: string): Promise<boolean> {
-		if(this.queryCache.has(x) === true){
-			return(this.queryCache.get(x));
+	public async loadClassifiers(x: Classifiers): Promise<void> {
+		this.classifier.load(x);
+	}
+	private async queryBinomial(x: string, y: string): Promise<boolean> {
+		const s = x + ' ' + y;
+		if(this.queryCacheBinomial.has(s) === true){
+			return(this.queryCacheBinomial.get(s));
 		} else {
-			let r: boolean = false;
-			const q = new Float32Array(3).fill(0.0);
-			const y: string = this.flatten.squash(x);
-			const z: Array<string> = y.replace(/[^a-z]/g, ' ').split('');
-			q[0] = await this.network.queryECNN(z);
-			q[1] = await this.network.queryLCNN(z);
-			q[2] = await this.network.queryPCNN(y);
-			if(await this.network.queryEDFFNN(q) > 0.5){
-				r = true;
-			}
-			this.queryCache.set(x, r);
+			const r: boolean = this.classifier.queryBELDA(await this.classifier.queryEnsemble(x), await this.classifier.queryEnsemble(y));
+			this.queryCacheBinomial.set(s, r);
+			return(r);
+		}
+	}
+	private async queryUninomial(x: string): Promise<boolean> {
+		if(this.queryCacheUninomial.has(x) === true){
+			return(this.queryCacheUninomial.get(x));
+		} else {
+			const r: boolean = this.classifier.queryUELDA(await this.classifier.queryEnsemble(x));
+			this.queryCacheUninomial.set(x, r);
 			return(r);
 		}
 	}

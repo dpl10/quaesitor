@@ -36,6 +36,7 @@
 		"@types/jasmine": "^3.3.13",
 		"@types/lodash": "^4.14.137",
 		"@types/node": "^12.7.2",
+		"@types/pbf": "^3.0.2",
 		"@types/xregexp": "^3.0.30",
 		"awesome-typescript-loader": "5.2.0",
 		"copy-webpack-plugin": "^5.0.4",
@@ -63,6 +64,7 @@
 		"lodash": "^4.17.15",
 		"mem": "^4.0.0",
 		"mnemonist": "^0.30.0",
+		"pbf": "^3.2.0",
 		"xregexp": "^4.2.4",
 		"xxhash-wasm": "^0.3.1"
 	}

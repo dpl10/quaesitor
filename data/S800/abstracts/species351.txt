@@ -1,0 +1,3 @@
+Emerging targets and treatments in amyotrophic lateral sclerosis.
+
+Amyotrophic lateral sclerosis (ALS) is a progressive motor neuron disease that is currently untreatable. Many compounds have been tested in laboratory-based models and in patients with ALS, but so far only one drug, riluzole, has shown efficacy, yet it only slightly slows disease progression. Several new insights into the causes of motor neuron death have led to the identification of some important novel targets for intervention. At no time have studies involved such a wide range of innovations and such advanced technologies. Many promising studies are underway to test potential targets that will hopefully translate into meaningful therapeutics for patients with ALS. 

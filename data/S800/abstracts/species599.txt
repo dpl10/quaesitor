@@ -1,0 +1,3 @@
+Complete genome sequence of strain HTCC2170, a novel member of the genus Maribacter in the family Flavobacteriaceae. 
+
+Strain HTCC2170 was isolated from surface waters off the Oregon coast using dilution-to-extinction culturing. Here, we present the finished genome sequence of a marine bacterium, Maribacter sp. strain HTCC2170. Strain sp. HTCC2170 is predicted to be a facultatively aerobic chemoorganotroph that, based on genomic sequence analysis, is capable of macromolecule degradation and anaerobic respiration. 

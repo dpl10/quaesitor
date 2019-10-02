@@ -1,0 +1,3 @@
+Draft genome sequence of the anoxygenic filamentous phototrophic bacterium Oscillochloris trichoides subsp. DG-6. 
+
+Oscillochloris trichoides is a mesophilic, filamentous, photoautotrophic, nonsulfur, diazotrophic bacterium which is capable of carbon dioxide fixation via the reductive pentose phosphate cycle and possesses no assimilative sulfate reduction. Here, we present the draft genome sequence of Oscillochloris trichoides subsp. DG-6, the type strain of the species, which has permitted the prediction of genes for carbon and nitrogen metabolism and for the light-harvesting apparatus. 

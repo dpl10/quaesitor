@@ -1,0 +1,3 @@
+Functional analysis of a mitochondrial phosphopantetheinyl transferase (PPTase) gene pptB in Aspergillus fumigatus. 
+
+The mitochondrial phosphopantetheinyl transferase gene pptB of the opportunistic pathogen Aspergillus fumigatus has been identified and characterised. Unlike pptA, which is required for lysine biosynthesis, secondary metabolism, and iron assimilation, pptB is essential for viability. PptB is located in the mitochondria. In vitro expression of pptA and pptB has shown that PptB is specific for the mitochondrial acyl carrier protein AcpA. 

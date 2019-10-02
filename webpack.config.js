@@ -72,6 +72,6 @@ nodeConfig.output.filename = 'quaesitor-node.js';
 nodeConfig.module.rules[3].options.defines.NODE = true;
 nodeConfig.target = 'node';
 module.exports = [
-	browserConfig,
+//	browserConfig,
 	nodeConfig
 ];
