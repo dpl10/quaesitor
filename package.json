@@ -66,7 +66,6 @@
 		"mem": "^4.0.0",
 		"mnemonist": "^0.30.0",
 		"pbf": "^3.2.1",
-		"serialize-javascript": "^3.0.0",
 		"xregexp": "^4.3.0",
 		"xxhash-wasm": "^0.3.1"
 	}
