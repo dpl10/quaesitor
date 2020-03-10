@@ -1,8 +1,11 @@
 # QUAESITOR
 *QUAESITOR* locates Latin scientific names in Chinese, Czech, Danish, Dutch, English, French, German, Italian, Japanese, Latin, Norwegian, Polish, Portuguese, Russian, Spanish, and Swedish text (approximately 96% of biodiversity titles). It uses a combination of pattern matching (regular expressions), a Bloom filter, and a trio of complementary ensembled neural networks. A [live version](https://www.nybg.org/files/scientists/dlittle/quaesitor-web/) of the web interface is hosted at the New York Botanical Garden.
 
-![Alt text](./data/fig1.svg)
 <img src="./data/fig1.svg">
+Fig. 1. Precision–recall curves for all possible cutoff values of BF (red), ECNN (green), LCNN (purple), PDFFNN (yellow), uEDFFNN (blue), and bEDFFNN (brown) calculated from validation data (5% of the total dataset; not used for neural network training or testing). A 5% random error was added to the inherent BF error rate to mimic the effect of missing entries thereby depressing the BF, uEDFFNN, and bEDFFNN curves. The binominal (bEDFFNN) and uninominal (uEDFFNN) ensemble classifiers perform better than any of the input classifiers demonstrating complementarity.
+
+<img src="./data/fig2.svg">
+Fig. 2. Precision versus recall for (A) A100, (B) S800, and (C) COPIOUS datasets using LINNAEUS (L), NETINETI (N), QUAESITOR (Q), SPECIES (S), and TAXONFINDER (T). Error bars indicate 95% confidence intervals. Confidence area opacity indicates relative processing time on a log scale with darker colors indicating slower programs.
 
 ### install
 `npm install quaesitor --save`
