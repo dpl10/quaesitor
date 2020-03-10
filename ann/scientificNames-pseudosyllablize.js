@@ -1,0 +1,221 @@
+#!/usr/bin/env node
+let deburr = require('lodash/deburr');
+let fs = require('fs');
+let i = null;
+const pseudosyllables = [
+	[new RegExp('..a..'), new RegExp('..b..'), new RegExp('..c..'), new RegExp('..d..'), new RegExp('..e$'), new RegExp('..e..'), new RegExp('..g..'), new RegExp('..h..'), new RegExp('..i..'), new RegExp('..k..'), new RegExp('..l..'), new RegExp('..m..'), new RegExp('..n..'), new RegExp('..o..'), new RegExp('..p..'), new RegExp('..r..'), new RegExp('..s$'), new RegExp('..s..'), new RegExp('..t..'), new RegExp('..u..'), new RegExp('.i.$'), new RegExp('.r..'), new RegExp('.s$'), new RegExp('.u.$'), new RegExp('^.e'), new RegExp('^.e.'), new RegExp('^.o'), new RegExp('^.o.'), new RegExp('i.$'), new RegExp('s$'), new RegExp('u.$')],
+	[new RegExp('..i$'), new RegExp('.a...'), new RegExp('.b...'), new RegExp('.c...'), new RegExp('.d...'), new RegExp('.e$'), new RegExp('.e.$'), new RegExp('.e...'), new RegExp('.g...'), new RegExp('.h...'), new RegExp('.i$'), new RegExp('.i...'), new RegExp('.k...'), new RegExp('.l...'), new RegExp('.m...'), new RegExp('.n...'), new RegExp('.o...'), new RegExp('.p...'), new RegExp('.r...'), new RegExp('.s...'), new RegExp('.t...'), new RegExp('.u...'), new RegExp('.y...'), new RegExp('^..r'), new RegExp('^n..'), new RegExp('^p.'), new RegExp('^p..'), new RegExp('e$'), new RegExp('e.$'), new RegExp('e..$'), new RegExp('i$')],
+	[new RegExp('...a.'), new RegExp('...b.'), new RegExp('...c.'), new RegExp('...d.'), new RegExp('...e.'), new RegExp('...g.'), new RegExp('...h.'), new RegExp('...i.'), new RegExp('...k.'), new RegExp('...l.'), new RegExp('...m.'), new RegExp('...n.'), new RegExp('...o.'), new RegExp('...p.'), new RegExp('...r.'), new RegExp('...s.'), new RegExp('...t.'), new RegExp('...u.'), new RegExp('...v.'), new RegExp('...y.'), new RegExp('...z.'), new RegExp('..n.'), new RegExp('^..e'), new RegExp('^.i'), new RegExp('^.i.'), new RegExp('^.r'), new RegExp('^n.'), new RegExp('^p'), new RegExp('^s..'), new RegExp('i..$'), new RegExp('n..$')],
+	[new RegExp('..an.'), new RegExp('..en.'), new RegExp('..er.'), new RegExp('..st.'), new RegExp('..te.'), new RegExp('..v..'), new RegExp('..y..'), new RegExp('..z..'), new RegExp('.a..'), new RegExp('.an..'), new RegExp('.ar..'), new RegExp('.c..'), new RegExp('.d..'), new RegExp('.e..'), new RegExp('.en..'), new RegExp('.er..'), new RegExp('.g..'), new RegExp('.h..'), new RegExp('.i..'), new RegExp('.l..'), new RegExp('.m..'), new RegExp('.n..'), new RegExp('.o..'), new RegExp('.p..'), new RegExp('.ri..'), new RegExp('.ro..'), new RegExp('.s..'), new RegExp('.t..'), new RegExp('.u..'), new RegExp('^n'), new RegExp('^s.')],
+	[new RegExp('..a.'), new RegExp('..b.'), new RegExp('..c.'), new RegExp('..d.'), new RegExp('..e.'), new RegExp('..g.'), new RegExp('..h.'), new RegExp('..i.'), new RegExp('..k.'), new RegExp('..l.'), new RegExp('..m.'), new RegExp('..o.'), new RegExp('..p.'), new RegExp('..r.'), new RegExp('..s.'), new RegExp('..t.'), new RegExp('..u.'), new RegExp('..y.'), new RegExp('.a.i.'), new RegExp('.an.'), new RegExp('.en.'), new RegExp('.n.'), new RegExp('.o.'), new RegExp('.o.a.'), new RegExp('.r.'), new RegExp('.ra..'), new RegExp('.v...'), new RegExp('.z...'), new RegExp('^.a'), new RegExp('^.a.'), new RegExp('^s')],
+	[new RegExp('..ri.'), new RegExp('.a.'), new RegExp('.al.'), new RegExp('.ar.'), new RegExp('.b..'), new RegExp('.c.'), new RegExp('.d.'), new RegExp('.e.'), new RegExp('.er.'), new RegExp('.g.'), new RegExp('.h.'), new RegExp('.i.'), new RegExp('.in.'), new RegExp('.k.'), new RegExp('.k..'), new RegExp('.l.'), new RegExp('.m.'), new RegExp('.ni.'), new RegExp('.p.'), new RegExp('.ra.'), new RegExp('.ri.'), new RegExp('.ro.'), new RegExp('.s.'), new RegExp('.st.'), new RegExp('.t.'), new RegExp('.te.'), new RegExp('.u.'), new RegExp('.v..'), new RegExp('.y.'), new RegExp('.y..'), new RegExp('.z..')],
+	[new RegExp('..a$'), new RegExp('..at.'), new RegExp('..in.'), new RegExp('..li.'), new RegExp('..m$'), new RegExp('..ni.'), new RegExp('..ra.'), new RegExp('..si.'), new RegExp('..v.'), new RegExp('..z.'), new RegExp('.a$'), new RegExp('.a.e.'), new RegExp('.at.'), new RegExp('.b.'), new RegExp('.ch.'), new RegExp('.e.s.'), new RegExp('.ic.'), new RegExp('.la.'), new RegExp('.li.'), new RegExp('.m$'), new RegExp('.n.$'), new RegExp('.st..'), new RegExp('.us$'), new RegExp('.v.'), new RegExp('.z.'), new RegExp('^.r.'), new RegExp('a$'), new RegExp('m$'), new RegExp('n.$'), new RegExp('s..$'), new RegExp('us$')],
+	[new RegExp('..ch.'), new RegExp('..ic.'), new RegExp('..or.'), new RegExp('..ro.'), new RegExp('.al..'), new RegExp('.at..'), new RegExp('.ch..'), new RegExp('.e.a.'), new RegExp('.e.e.'), new RegExp('.e.i.'), new RegExp('.e.t.'), new RegExp('.ie.'), new RegExp('.ie..'), new RegExp('.in..'), new RegExp('.is$'), new RegExp('.la..'), new RegExp('.n.e.'), new RegExp('.n.i.'), new RegExp('.o.e.'), new RegExp('.o.i.'), new RegExp('.on.'), new RegExp('.or.'), new RegExp('.re.'), new RegExp('.re..'), new RegExp('.te..'), new RegExp('^..s'), new RegExp('^.u.'), new RegExp('^c..'), new RegExp('a..$'), new RegExp('is$'), new RegExp('t..$')],
+	[new RegExp('..al.'), new RegExp('..ar.'), new RegExp('..el.'), new RegExp('..on.'), new RegExp('..ti.'), new RegExp('.a.a.'), new RegExp('.a.o.'), new RegExp('.el.'), new RegExp('.el..'), new RegExp('.es.'), new RegExp('.i.a.'), new RegExp('.i.e.'), new RegExp('.i.o.'), new RegExp('.li..'), new RegExp('.m.$'), new RegExp('.ni..'), new RegExp('.ol.'), new RegExp('.on..'), new RegExp('.or..'), new RegExp('.os.'), new RegExp('.os..'), new RegExp('.s.e.'), new RegExp('.si.'), new RegExp('.ti.'), new RegExp('.ti..'), new RegExp('^..n'), new RegExp('^.u'), new RegExp('^c.'), new RegExp('^m..'), new RegExp('m.$'), new RegExp('t.$')],
+	[new RegExp('..de.'), new RegExp('..f..'), new RegExp('..j..'), new RegExp('..la.'), new RegExp('..le.'), new RegExp('..ne.'), new RegExp('..ns.'), new RegExp('..re.'), new RegExp('..w..'), new RegExp('.ac.'), new RegExp('.de.'), new RegExp('.f..'), new RegExp('.ia.'), new RegExp('.ic..'), new RegExp('.is.'), new RegExp('.le.'), new RegExp('.lo.'), new RegExp('.ne.'), new RegExp('.ne..'), new RegExp('.ns.'), new RegExp('.ta.'), new RegExp('^..a'), new RegExp('^..l'), new RegExp('^..t'), new RegExp('^a.'), new RegExp('^a..'), new RegExp('^c'), new RegExp('^m.'), new RegExp('l..$'), new RegExp('o..$'), new RegExp('r..$')],
+	[new RegExp('..f.'), new RegExp('..n$'), new RegExp('..w.'), new RegExp('.a.$'), new RegExp('.a.t.'), new RegExp('.e.o.'), new RegExp('.f.'), new RegExp('.f...'), new RegExp('.i.i.'), new RegExp('.i.n.'), new RegExp('.j...'), new RegExp('.l.$'), new RegExp('.le..'), new RegExp('.lo..'), new RegExp('.n$'), new RegExp('.ns..'), new RegExp('.o.o.'), new RegExp('.r.e.'), new RegExp('.r.n.'), new RegExp('.t.$'), new RegExp('.ta..'), new RegExp('.to..'), new RegExp('.w.'), new RegExp('.w...'), new RegExp('^..i'), new RegExp('^a'), new RegExp('^m'), new RegExp('^ne.'), new RegExp('a.$'), new RegExp('l.$'), new RegExp('n$')],
+	[new RegExp('...f.'), new RegExp('...j.'), new RegExp('...w.'), new RegExp('..ac.'), new RegExp('..ia.'), new RegExp('..ie.'), new RegExp('..is.'), new RegExp('..ll.'), new RegExp('..lo.'), new RegExp('..na.'), new RegExp('..no.'), new RegExp('..ol.'), new RegExp('..op.'), new RegExp('..os.'), new RegExp('..ta.'), new RegExp('..to.'), new RegExp('.a.u.'), new RegExp('.ens.'), new RegExp('.es$'), new RegExp('.r.i.'), new RegExp('.s.i.'), new RegExp('.t.r.'), new RegExp('.w..'), new RegExp('^..c'), new RegExp('^..o'), new RegExp('^b..'), new RegExp('^d.'), new RegExp('^d..'), new RegExp('^ne'), new RegExp('^t..'), new RegExp('es$')],
+	[new RegExp('..j.'), new RegExp('..nt.'), new RegExp('.ac..'), new RegExp('.as.'), new RegExp('.as..'), new RegExp('.es..'), new RegExp('.et.'), new RegExp('.ia..'), new RegExp('.id.'), new RegExp('.il.'), new RegExp('.il..'), new RegExp('.is..'), new RegExp('.j.'), new RegExp('.ll.'), new RegExp('.na.'), new RegExp('.ng.'), new RegExp('.no.'), new RegExp('.no..'), new RegExp('.nt.'), new RegExp('.nt..'), new RegExp('.ol..'), new RegExp('.op.'), new RegExp('.op..'), new RegExp('.r.a.'), new RegExp('.to.'), new RegExp('.tr..'), new RegExp('^b.'), new RegExp('^d'), new RegExp('^t.'), new RegExp('d..$'), new RegExp('r.$')],
+	[new RegExp('..as.'), new RegExp('..ci.'), new RegExp('..id.'), new RegExp('..ng.'), new RegExp('..se.'), new RegExp('..tr.'), new RegExp('.am.'), new RegExp('.c.$'), new RegExp('.e.l.'), new RegExp('.e.n.'), new RegExp('.id..'), new RegExp('.j..'), new RegExp('.l.n.'), new RegExp('.nd.'), new RegExp('.ng..'), new RegExp('.o.$'), new RegExp('.o.t.'), new RegExp('.se.'), new RegExp('.se..'), new RegExp('.tr.'), new RegExp('.um$'), new RegExp('^..p'), new RegExp('^b'), new RegExp('^r.'), new RegExp('^r..'), new RegExp('^t'), new RegExp('c.$'), new RegExp('o.$'), new RegExp('s.s$'), new RegExp('si.$'), new RegExp('um$')],
+	[new RegExp('..es.'), new RegExp('..ge.'), new RegExp('..il.'), new RegExp('..nd.'), new RegExp('..ov.'), new RegExp('.em.'), new RegExp('.et..'), new RegExp('.ha.'), new RegExp('.ha..'), new RegExp('.i.t.'), new RegExp('.it.'), new RegExp('.ll..'), new RegExp('.ma..'), new RegExp('.na..'), new RegExp('.nd..'), new RegExp('.oc.'), new RegExp('.oc..'), new RegExp('.om.'), new RegExp('.ov.'), new RegExp('.r.$'), new RegExp('.r.c.'), new RegExp('.ru.'), new RegExp('.s.a.'), new RegExp('.t.n.'), new RegExp('.ul.'), new RegExp('^..m'), new RegExp('^.l.'), new RegExp('^l.'), new RegExp('^l..'), new RegExp('^r'), new RegExp('a.a$')],
+	[new RegExp('..do.'), new RegExp('..et.'), new RegExp('..oc.'), new RegExp('..ow.'), new RegExp('..sc.'), new RegExp('.am..'), new RegExp('.ci.'), new RegExp('.di.'), new RegExp('.e.r.'), new RegExp('.ge.'), new RegExp('.it..'), new RegExp('.n.a.'), new RegExp('.n.s.'), new RegExp('.om..'), new RegExp('.ot.'), new RegExp('.ov..'), new RegExp('.ow.'), new RegExp('.r.s.'), new RegExp('.sc.'), new RegExp('.si..'), new RegExp('.u.a.'), new RegExp('.va..'), new RegExp('^.ie'), new RegExp('^.l'), new RegExp('^e.'), new RegExp('^e..'), new RegExp('^h.'), new RegExp('^h..'), new RegExp('^k.'), new RegExp('^k..'), new RegExp('^l')],
+	[new RegExp('..am.'), new RegExp('..di.'), new RegExp('..ha.'), new RegExp('..it.'), new RegExp('..ma.'), new RegExp('..va.'), new RegExp('.a.s.'), new RegExp('.de..'), new RegExp('.i.l.'), new RegExp('.i.u.'), new RegExp('.ia$'), new RegExp('.io.'), new RegExp('.ma.'), new RegExp('.ot..'), new RegExp('.s.$'), new RegExp('.s.o.'), new RegExp('.s.r.'), new RegExp('.tu.'), new RegExp('.ul..'), new RegExp('.ur.'), new RegExp('.va.'), new RegExp('^.n.'), new RegExp('^e'), new RegExp('^h'), new RegExp('^k'), new RegExp('^ni.'), new RegExp('c..$'), new RegExp('ia$'), new RegExp('o$'), new RegExp('s.$'), new RegExp('sis$')],
+	[new RegExp('..io.'), new RegExp('..me.'), new RegExp('..o$'), new RegExp('..ru.'), new RegExp('..tu.'), new RegExp('.co.'), new RegExp('.co..'), new RegExp('.do.'), new RegExp('.do..'), new RegExp('.en$'), new RegExp('.ep.'), new RegExp('.ep..'), new RegExp('.io..'), new RegExp('.me.'), new RegExp('.na$'), new RegExp('.o$'), new RegExp('.od.'), new RegExp('.od..'), new RegExp('.r.t.'), new RegExp('.sc..'), new RegExp('.t.l.'), new RegExp('.u.i.'), new RegExp('^..u'), new RegExp('^.n'), new RegExp('^g..'), new RegExp('^ni'), new RegExp('^o.'), new RegExp('^o..'), new RegExp('an.$'), new RegExp('en$'), new RegExp('na$')],
+	[new RegExp('..co.'), new RegExp('..em.'), new RegExp('..mi.'), new RegExp('..om.'), new RegExp('..ul.'), new RegExp('.ca.'), new RegExp('.ci..'), new RegExp('.di..'), new RegExp('.e.d.'), new RegExp('.ei.'), new RegExp('.he.'), new RegExp('.hi.'), new RegExp('.l.e.'), new RegExp('.l.s.'), new RegExp('.mi.'), new RegExp('.n.t.'), new RegExp('.nsi.'), new RegExp('.ow..'), new RegExp('.ph.'), new RegExp('.t.a.'), new RegExp('.t.e.'), new RegExp('.un.'), new RegExp('.ur..'), new RegExp('^..b'), new RegExp('^..d'), new RegExp('^.y.'), new RegExp('^f.'), new RegExp('^f..'), new RegExp('^g.'), new RegExp('^n.e'), new RegExp('^o')],
+	[new RegExp('..ca.'), new RegExp('..ot.'), new RegExp('..ph.'), new RegExp('..ss.'), new RegExp('.ad.'), new RegExp('.c.e.'), new RegExp('.c.l.'), new RegExp('.ce.'), new RegExp('.ec.'), new RegExp('.ge..'), new RegExp('.i.r.'), new RegExp('.l.i.'), new RegExp('.la$'), new RegExp('.me..'), new RegExp('.n.o.'), new RegExp('.o.u.'), new RegExp('.ph..'), new RegExp('.r.o.'), new RegExp('.ss.'), new RegExp('.t.i.'), new RegExp('.t.o.'), new RegExp('.u.e.'), new RegExp('.wa.'), new RegExp('^.ar'), new RegExp('^.h'), new RegExp('^.h.'), new RegExp('^.y'), new RegExp('^f'), new RegExp('^g'), new RegExp('^nie'), new RegExp('la$')],
+	[new RegExp('..ce.'), new RegExp('..da.'), new RegExp('..he.'), new RegExp('..ko.'), new RegExp('..r$'), new RegExp('..wa.'), new RegExp('.a.d.'), new RegExp('.a.r.'), new RegExp('.ca..'), new RegExp('.ce..'), new RegExp('.da.'), new RegExp('.em..'), new RegExp('.ho.'), new RegExp('.ho..'), new RegExp('.im.'), new RegExp('.ko.'), new RegExp('.ko..'), new RegExp('.l.t.'), new RegExp('.lu.'), new RegExp('.m.n.'), new RegExp('.n.r.'), new RegExp('.nu.'), new RegExp('.o.h.'), new RegExp('.o.s.'), new RegExp('.pi.'), new RegExp('.po.'), new RegExp('.po..'), new RegExp('.r$'), new RegExp('.un..'), new RegExp('^..g'), new RegExp('r$')],
+	[new RegExp('..ei.'), new RegExp('..hi.'), new RegExp('..ho.'), new RegExp('..lu.'), new RegExp('..mo.'), new RegExp('..nu.'), new RegExp('..od.'), new RegExp('..po.'), new RegExp('..th.'), new RegExp('.a.n.'), new RegExp('.ae$'), new RegExp('.c.a.'), new RegExp('.c.n.'), new RegExp('.ec..'), new RegExp('.ed.'), new RegExp('.ei..'), new RegExp('.ell.'), new RegExp('.eu.'), new RegExp('.hi..'), new RegExp('.l.a.'), new RegExp('.mi..'), new RegExp('.mo.'), new RegExp('.pe.'), new RegExp('.ss..'), new RegExp('.th.'), new RegExp('.us.'), new RegExp('.us..'), new RegExp('.wa..'), new RegExp('^.er'), new RegExp('ae$'), new RegExp('t.s$')],
+	[new RegExp('..pe.'), new RegExp('..t$'), new RegExp('..un.'), new RegExp('..ur.'), new RegExp('.ad..'), new RegExp('.av.'), new RegExp('.be.'), new RegExp('.c.o.'), new RegExp('.e.u.'), new RegExp('.he..'), new RegExp('.i.s.'), new RegExp('.n.c.'), new RegExp('.o.d.'), new RegExp('.pa.'), new RegExp('.pi..'), new RegExp('.s.u.'), new RegExp('.t$'), new RegExp('.ta$'), new RegExp('.ter.'), new RegExp('.th..'), new RegExp('.u.o.'), new RegExp('.ve.'), new RegExp('^v..'), new RegExp('de.$'), new RegExp('i.a$'), new RegExp('l.s$'), new RegExp('m..$'), new RegExp('t$'), new RegExp('ta$'), new RegExp('te.$'), new RegExp('y..$')],
+	[new RegExp('..ad.'), new RegExp('..im.'), new RegExp('..pi.'), new RegExp('..sa.'), new RegExp('..sk.'), new RegExp('..ve.'), new RegExp('..y$'), new RegExp('.a.l.'), new RegExp('.a.y.'), new RegExp('.c.r.'), new RegExp('.ed..'), new RegExp('.g.n.'), new RegExp('.h.l.'), new RegExp('.ig.'), new RegExp('.ig..'), new RegExp('.l.c.'), new RegExp('.n.n.'), new RegExp('.o.r.'), new RegExp('.o.y.'), new RegExp('.p.r.'), new RegExp('.rt.'), new RegExp('.sa.'), new RegExp('.sk.'), new RegExp('.ste.'), new RegExp('.t.c.'), new RegExp('.y$'), new RegExp('^v.'), new RegExp('e.s$'), new RegExp('en.$'), new RegExp('u..$'), new RegExp('y$')],
+	[new RegExp('..be.'), new RegExp('..ec.'), new RegExp('..ga.'), new RegExp('..ka.'), new RegExp('..rt.'), new RegExp('..u$'), new RegExp('.ap.'), new RegExp('.ap..'), new RegExp('.av..'), new RegExp('.ba.'), new RegExp('.c.i.'), new RegExp('.eo.'), new RegExp('.ga.'), new RegExp('.i.g.'), new RegExp('.i.h.'), new RegExp('.ka.'), new RegExp('.l.r.'), new RegExp('.mo..'), new RegExp('.pa..'), new RegExp('.ru..'), new RegExp('.sa..'), new RegExp('.so.'), new RegExp('.u$'), new RegExp('.v.n.'), new RegExp('^.s'), new RegExp('^.s.'), new RegExp('^.t.'), new RegExp('^v'), new RegExp('n.s$'), new RegExp('o.a$'), new RegExp('u$')],
+	[new RegExp('..av.'), new RegExp('..ba.'), new RegExp('..h$'), new RegExp('..pa.'), new RegExp('.a.h.'), new RegExp('.ab.'), new RegExp('.ani.'), new RegExp('.be..'), new RegExp('.cu.'), new RegExp('.eo..'), new RegExp('.eu..'), new RegExp('.h$'), new RegExp('.i.c.'), new RegExp('.o.l.'), new RegExp('.o.n.'), new RegExp('.pe..'), new RegExp('.pr.'), new RegExp('.pr..'), new RegExp('.r.m.'), new RegExp('.r.p.'), new RegExp('.r.u.'), new RegExp('.s.n.'), new RegExp('.ve..'), new RegExp('.ze.'), new RegExp('^..z'), new RegExp('^.t'), new RegExp('^i.'), new RegExp('^i..'), new RegExp('d.s$'), new RegExp('h$'), new RegExp('l.a$')],
+	[new RegExp('..cu.'), new RegExp('..ep.'), new RegExp('..eu.'), new RegExp('..za.'), new RegExp('..ze.'), new RegExp('.ab..'), new RegExp('.ag.'), new RegExp('.ali.'), new RegExp('.d.n.'), new RegExp('.eg.'), new RegExp('.ga..'), new RegExp('.h.n.'), new RegExp('.h.r.'), new RegExp('.if.'), new RegExp('.ka..'), new RegExp('.l.o.'), new RegExp('.p.i.'), new RegExp('.p.o.'), new RegExp('.rt..'), new RegExp('.sk..'), new RegExp('.so..'), new RegExp('.sp.'), new RegExp('.sp..'), new RegExp('.vi.'), new RegExp('.za.'), new RegExp('^..h'), new RegExp('^.c.'), new RegExp('^i'), new RegExp('^pr.'), new RegExp('h..$'), new RegExp('r.s$')],
+	[new RegExp('..ig.'), new RegExp('..pr.'), new RegExp('..so.'), new RegExp('..sp.'), new RegExp('..vi.'), new RegExp('.ae.'), new RegExp('.ae..'), new RegExp('.ag..'), new RegExp('.ari.'), new RegExp('.au..'), new RegExp('.ba..'), new RegExp('.ch$'), new RegExp('.if..'), new RegExp('.ir.'), new RegExp('.mi$'), new RegExp('.n.l.'), new RegExp('.n.m.'), new RegExp('.n.u.'), new RegExp('.ost.'), new RegExp('.p.a.'), new RegExp('.p.e.'), new RegExp('.u.t.'), new RegExp('.za..'), new RegExp('.ze..'), new RegExp('^.c'), new RegExp('^pr'), new RegExp('^z..'), new RegExp('ch$'), new RegExp('mi$'), new RegExp('ni.$'), new RegExp('tu.$')],
+	[new RegExp('..bi.'), new RegExp('..ed.'), new RegExp('..if.'), new RegExp('..us.'), new RegExp('.a.c.'), new RegExp('.au.'), new RegExp('.ct.'), new RegExp('.da..'), new RegExp('.e.c.'), new RegExp('.ian.'), new RegExp('.ide.'), new RegExp('.ip.'), new RegExp('.ip..'), new RegExp('.ir..'), new RegExp('.l.u.'), new RegExp('.m.r.'), new RegExp('.ob.'), new RegExp('.ova.'), new RegExp('.r.l.'), new RegExp('.rn.'), new RegExp('.s.h.'), new RegExp('.ut.'), new RegExp('^.al'), new RegExp('^.an'), new RegExp('^.p.'), new RegExp('^ma.'), new RegExp('^pa.'), new RegExp('^po.'), new RegExp('^z.'), new RegExp('er.$'), new RegExp('g..$')],
+	[new RegExp('..ab.'), new RegExp('..ae.'), new RegExp('..rn.'), new RegExp('..rs.'), new RegExp('.bi.'), new RegExp('.bi..'), new RegExp('.d.r.'), new RegExp('.ea.'), new RegExp('.ej.'), new RegExp('.eri.'), new RegExp('.ke.'), new RegExp('.nc.'), new RegExp('.nc..'), new RegExp('.ob..'), new RegExp('.oi.'), new RegExp('.r.d.'), new RegExp('.rs.'), new RegExp('.ut..'), new RegExp('.vi..'), new RegExp('.y.$'), new RegExp('.yc.'), new RegExp('.ys.'), new RegExp('^.or'), new RegExp('^.p'), new RegExp('^ma'), new RegExp('^pa'), new RegExp('^po'), new RegExp('^z'), new RegExp('at.$'), new RegExp('nu.$'), new RegExp('y.$')],
+	[new RegExp('..ap.'), new RegExp('..ct.'), new RegExp('..eg.'), new RegExp('..ej.'), new RegExp('..ke.'), new RegExp('..rm.'), new RegExp('.er$'), new RegExp('.fo.'), new RegExp('.gi.'), new RegExp('.im..'), new RegExp('.ing.'), new RegExp('.l.b.'), new RegExp('.og.'), new RegExp('.oi..'), new RegExp('.p.l.'), new RegExp('.p.n.'), new RegExp('.ra$'), new RegExp('.rm.'), new RegExp('.rs..'), new RegExp('.tu..'), new RegExp('.ud.'), new RegExp('.ud..'), new RegExp('.ys..'), new RegExp('^.on'), new RegExp('^.ra'), new RegExp('^w.'), new RegExp('^w..'), new RegExp('ana$'), new RegExp('er$'), new RegExp('n.e$'), new RegExp('ra$')],
+	[new RegExp('..ag.'), new RegExp('..fo.'), new RegExp('..oi.'), new RegExp('.ct..'), new RegExp('.eg..'), new RegExp('.ej..'), new RegExp('.ek.'), new RegExp('.ent.'), new RegExp('.f.r.'), new RegExp('.g.a.'), new RegExp('.h.e.'), new RegExp('.i.p.'), new RegExp('.iu.'), new RegExp('.lu..'), new RegExp('.m.t.'), new RegExp('.n.h.'), new RegExp('.nn.'), new RegExp('.og..'), new RegExp('.rn..'), new RegExp('.s.m.'), new RegExp('.t.s.'), new RegExp('.uc.'), new RegExp('^..k'), new RegExp('^.es'), new RegExp('^p.e'), new RegExp('^p.r'), new RegExp('^w'), new RegExp('des$'), new RegExp('e.e$'), new RegExp('ll.$'), new RegExp('ri.$')],
+	[new RegExp('..ea.'), new RegExp('..gi.'), new RegExp('..ip.'), new RegExp('..iu.'), new RegExp('..nc.'), new RegExp('..tt.'), new RegExp('..ud.'), new RegExp('..ut.'), new RegExp('..yc.'), new RegExp('.and.'), new RegExp('.b.r.'), new RegExp('.e.h.'), new RegExp('.e.m.'), new RegExp('.ere.'), new RegExp('.fo..'), new RegExp('.ne$'), new RegExp('.rm..'), new RegExp('.rz.'), new RegExp('.rz..'), new RegExp('.s.l.'), new RegExp('.tt.'), new RegExp('.uc..'), new RegExp('.van.'), new RegExp('.y.o.'), new RegExp('^..v'), new RegExp('^.en'), new RegExp('^u..'), new RegExp('a.i$'), new RegExp('ic.$'), new RegExp('li.$'), new RegExp('ne$')],
+	[new RegExp('..ir.'), new RegExp('..nn.'), new RegExp('..ob.'), new RegExp('..og.'), new RegExp('..ys.'), new RegExp('.ak.'), new RegExp('.ane.'), new RegExp('.ara.'), new RegExp('.br.'), new RegExp('.c.t.'), new RegExp('.d.$'), new RegExp('.ea..'), new RegExp('.ek..'), new RegExp('.ez.'), new RegExp('.hr.'), new RegExp('.i.k.'), new RegExp('.ist.'), new RegExp('.o.p.'), new RegExp('.owa.'), new RegExp('.ran.'), new RegExp('.ry.'), new RegExp('.sch.'), new RegExp('.str.'), new RegExp('.t.t.'), new RegExp('.ub.'), new RegExp('.y.a.'), new RegExp('.ym.'), new RegExp('^ca.'), new RegExp('^u.'), new RegExp('d.$'), new RegExp('ru.$')],
+	[new RegExp('..au.'), new RegExp('.a.g.'), new RegExp('.ant.'), new RegExp('.atu.'), new RegExp('.br..'), new RegExp('.d.l.'), new RegExp('.e.k.'), new RegExp('.era.'), new RegExp('.ero.'), new RegExp('.gi..'), new RegExp('.h.$'), new RegExp('.i.m.'), new RegExp('.ii$'), new RegExp('.k.e.'), new RegExp('.ki.'), new RegExp('.l.g.'), new RegExp('.ma$'), new RegExp('.nn..'), new RegExp('.oz.'), new RegExp('.oz..'), new RegExp('.ry..'), new RegExp('.tt..'), new RegExp('.ub..'), new RegExp('^ca'), new RegExp('^co.'), new RegExp('^u'), new RegExp('e.a$'), new RegExp('h.$'), new RegExp('ii$'), new RegExp('in.$'), new RegExp('ma$')],
+	[new RegExp('..cz.'), new RegExp('.ak..'), new RegExp('.bo.'), new RegExp('.cz.'), new RegExp('.d.a.'), new RegExp('.ez..'), new RegExp('.g.$'), new RegExp('.g.r.'), new RegExp('.hr..'), new RegExp('.hy.'), new RegExp('.i.d.'), new RegExp('.ke..'), new RegExp('.m.e.'), new RegExp('.m.l.'), new RegExp('.o.c.'), new RegExp('.o.m.'), new RegExp('.oid.'), new RegExp('.su.'), new RegExp('.t.m.'), new RegExp('.v.r.'), new RegExp('.z.n.'), new RegExp('^..y'), new RegExp('^.ro'), new RegExp('^co'), new RegExp('^de.'), new RegExp('^st.'), new RegExp('g.$'), new RegExp('k..$'), new RegExp('lla$'), new RegExp('ne.$'), new RegExp('p..$')],
+	[new RegExp('..br.'), new RegExp('..eo.'), new RegExp('..ki.'), new RegExp('.a.k.'), new RegExp('.a.m.'), new RegExp('.a.p.'), new RegExp('.c.u.'), new RegExp('.dr.'), new RegExp('.em$'), new RegExp('.eni.'), new RegExp('.ev.'), new RegExp('.gr.'), new RegExp('.gr..'), new RegExp('.k.n.'), new RegExp('.l.p.'), new RegExp('.nge.'), new RegExp('.ny.'), new RegExp('.oni.'), new RegExp('.te$'), new RegExp('.yl.'), new RegExp('^.m'), new RegExp('^.m.'), new RegExp('^.ol'), new RegExp('^.ri'), new RegExp('^de'), new RegExp('^st'), new RegExp('em$'), new RegExp('lu.$'), new RegExp('m.s$'), new RegExp('r.a$'), new RegExp('te$')],
+	[new RegExp('..bo.'), new RegExp('..ek.'), new RegExp('..gr.'), new RegExp('..ny.'), new RegExp('..su.'), new RegExp('..uc.'), new RegExp('..ym.'), new RegExp('.ai.'), new RegExp('.bo..'), new RegExp('.cz..'), new RegExp('.eb.'), new RegExp('.ev..'), new RegExp('.ik.'), new RegExp('.iz.'), new RegExp('.mp.'), new RegExp('.mp..'), new RegExp('.ns$'), new RegExp('.ou.'), new RegExp('.pl.'), new RegExp('.pl..'), new RegExp('.r.g.'), new RegExp('.rd.'), new RegExp('.rr.'), new RegExp('.u.n.'), new RegExp('.um.'), new RegExp('^.el'), new RegExp('^.in'), new RegExp('iu.$'), new RegExp('n.m$'), new RegExp('ns$'), new RegExp('tus$')],
+	[new RegExp('..ck.'), new RegExp('..dr.'), new RegExp('..gs.'), new RegExp('..rd.'), new RegExp('.b.l.'), new RegExp('.ck.'), new RegExp('.cu..'), new RegExp('.d.i.'), new RegExp('.eb..'), new RegExp('.est.'), new RegExp('.g.e.'), new RegExp('.hu.'), new RegExp('.hy..'), new RegExp('.ien.'), new RegExp('.iv.'), new RegExp('.k.$'), new RegExp('.l.m.'), new RegExp('.lan.'), new RegExp('.r.h.'), new RegExp('.r.v.'), new RegExp('.ty.'), new RegExp('.um..'), new RegExp('.w.n.'), new RegExp('.yl..'), new RegExp('.zo.'), new RegExp('^.ep'), new RegExp('^.re'), new RegExp('a.e$'), new RegExp('ata$'), new RegExp('k.$'), new RegExp('n.a$')],
+	[new RegExp('..go.'), new RegExp('..hr.'), new RegExp('..iz.'), new RegExp('..pl.'), new RegExp('..ty.'), new RegExp('..zo.'), new RegExp('.ast.'), new RegExp('.ati.'), new RegExp('.che.'), new RegExp('.dr..'), new RegExp('.e.b.'), new RegExp('.e.p.'), new RegExp('.go.'), new RegExp('.gs.'), new RegExp('.gs..'), new RegExp('.ik..'), new RegExp('.ja.'), new RegExp('.lat.'), new RegExp('.ly.'), new RegExp('.oli.'), new RegExp('.ou..'), new RegExp('.pt.'), new RegExp('.rd..'), new RegExp('.rr..'), new RegExp('.sti.'), new RegExp('.ten.'), new RegExp('.ty..'), new RegExp('.u.g.'), new RegExp('.u.u.'), new RegExp('.wi.'), new RegExp('.zo..')],
+	[new RegExp('..hu.'), new RegExp('..ik.'), new RegExp('..ja.'), new RegExp('..pt.'), new RegExp('..rr.'), new RegExp('..ry.'), new RegExp('..yl.'), new RegExp('.d.e.'), new RegExp('.d.o.'), new RegExp('.e.g.'), new RegExp('.go..'), new RegExp('.ich.'), new RegExp('.iz..'), new RegExp('.js.'), new RegExp('.l.d.'), new RegExp('.mu.'), new RegExp('.nos.'), new RegExp('.rc.'), new RegExp('.rg.'), new RegExp('.rg..'), new RegExp('.s.c.'), new RegExp('.se$'), new RegExp('.sm.'), new RegExp('.t.p.'), new RegExp('^.as'), new RegExp('^an.'), new RegExp('^re'), new RegExp('^re.'), new RegExp('^tr.'), new RegExp('b..$'), new RegExp('se$')],
+	[new RegExp('..fe.'), new RegExp('..js.'), new RegExp('..sm.'), new RegExp('..wi.'), new RegExp('.ach.'), new RegExp('.anu.'), new RegExp('.as$'), new RegExp('.ava.'), new RegExp('.e.y.'), new RegExp('.fe.'), new RegExp('.iv..'), new RegExp('.ja..'), new RegExp('.lt.'), new RegExp('.ly..'), new RegExp('.pt..'), new RegExp('.r.b.'), new RegExp('.r.r.'), new RegExp('.r.z.'), new RegExp('.ren.'), new RegExp('.sta.'), new RegExp('.t.u.'), new RegExp('.tra.'), new RegExp('.wi..'), new RegExp('.yc..'), new RegExp('^.la'), new RegExp('^an'), new RegExp('^ch.'), new RegExp('^tr'), new RegExp('as$'), new RegExp('e.i$'), new RegExp('re.$')],
+	[new RegExp('..ak.'), new RegExp('..hy.'), new RegExp('..ly.'), new RegExp('..mu.'), new RegExp('..rg.'), new RegExp('..uj.'), new RegExp('.aj.'), new RegExp('.h.a.'), new RegExp('.h.i.'), new RegExp('.ib.'), new RegExp('.ki..'), new RegExp('.l.v.'), new RegExp('.lin.'), new RegExp('.nic.'), new RegExp('.rc..'), new RegExp('.ric.'), new RegExp('.tri.'), new RegExp('.u.c.'), new RegExp('.u.s.'), new RegExp('.uj.'), new RegExp('.w.l.'), new RegExp('.y.i.'), new RegExp('^ba.'), new RegExp('^c.r'), new RegExp('^ch'), new RegExp('^la.'), new RegExp('^me.'), new RegExp('em.$'), new RegExp('i.m$'), new RegExp('nus$'), new RegExp('v..$')],
+	[new RegExp('..gu.'), new RegExp('..iv.'), new RegExp('..rz.'), new RegExp('..zi.'), new RegExp('.ano.'), new RegExp('.chi.'), new RegExp('.d.s.'), new RegExp('.ejs.'), new RegExp('.gen.'), new RegExp('.gu.'), new RegExp('.lt..'), new RegExp('.m.s.'), new RegExp('.nde.'), new RegExp('.nu..'), new RegExp('.oe.'), new RegExp('.oph.'), new RegExp('.r.k.'), new RegExp('.rin.'), new RegExp('.s.t.'), new RegExp('.ts.'), new RegExp('.ts..'), new RegExp('.ue.'), new RegExp('.yp.'), new RegExp('.yp..'), new RegExp('.zi.'), new RegExp('^..f'), new RegExp('^..j'), new RegExp('^ba'), new RegExp('^la'), new RegExp('^me'), new RegExp('i.e$')],
+	[new RegExp('..eb.'), new RegExp('..lt.'), new RegExp('..ts.'), new RegExp('..um.'), new RegExp('.b.e.'), new RegExp('.ck..'), new RegExp('.cr.'), new RegExp('.cr..'), new RegExp('.d.c.'), new RegExp('.du.'), new RegExp('.e.z.'), new RegExp('.ene.'), new RegExp('.fi.'), new RegExp('.h.o.'), new RegExp('.ib..'), new RegExp('.ie$'), new RegExp('.ier.'), new RegExp('.j.i.'), new RegExp('.mb.'), new RegExp('.n.p.'), new RegExp('.pu.'), new RegExp('.u.r.'), new RegExp('.v.l.'), new RegExp('.wan.'), new RegExp('.y.e.'), new RegExp('^in.'), new RegExp('^su.'), new RegExp('i.s$'), new RegExp('ie$'), new RegExp('im.$'), new RegExp('t.m$')],
+	[new RegExp('..du.'), new RegExp('..fi.'), new RegExp('..g$'), new RegExp('..mp.'), new RegExp('..pu.'), new RegExp('..rc.'), new RegExp('.a.b.'), new RegExp('.ala.'), new RegExp('.c.s.'), new RegExp('.g$'), new RegExp('.ico.'), new RegExp('.je.'), new RegExp('.js..'), new RegExp('.n.j.'), new RegExp('.ni$'), new RegExp('.nia.'), new RegExp('.nk.'), new RegExp('.o.k.'), new RegExp('.os$'), new RegExp('.ue..'), new RegExp('^.ac'), new RegExp('^.at'), new RegExp('^.b.'), new RegExp('^.d.'), new RegExp('^.et'), new RegExp('^in'), new RegExp('^pe.'), new RegExp('^su'), new RegExp('g$'), new RegExp('ni$'), new RegExp('os$')],
+	[new RegExp('..nk.'), new RegExp('.b.a.'), new RegExp('.b.i.'), new RegExp('.b.n.'), new RegExp('.cha.'), new RegExp('.fe..'), new RegExp('.fi..'), new RegExp('.g.l.'), new RegExp('.i.z.'), new RegExp('.ini.'), new RegExp('.k.a.'), new RegExp('.lli.'), new RegExp('.mb..'), new RegExp('.nen.'), new RegExp('.ny..'), new RegExp('.oe..'), new RegExp('.ok.'), new RegExp('.rat.'), new RegExp('.tel.'), new RegExp('.tro.'), new RegExp('.u.l.'), new RegExp('.we.'), new RegExp('.zi..'), new RegExp('^.b'), new RegExp('^.d'), new RegExp('^.ur'), new RegExp('^di.'), new RegExp('^na.'), new RegExp('^pe'), new RegExp('^ps.'), new RegExp('^sa.')],
+	[new RegExp('..ai.'), new RegExp('..ou.'), new RegExp('.aj..'), new RegExp('.ato.'), new RegExp('.eh.'), new RegExp('.f.l.'), new RegExp('.g.s.'), new RegExp('.j.c.'), new RegExp('.len.'), new RegExp('.m.a.'), new RegExp('.men.'), new RegExp('.ngs.'), new RegExp('.nte.'), new RegExp('.o.g.'), new RegExp('.rb.'), new RegExp('.tan.'), new RegExp('.tic.'), new RegExp('.ua.'), new RegExp('.uj..'), new RegExp('.v.$'), new RegExp('^di'), new RegExp('^mi.'), new RegExp('^na'), new RegExp('^ps'), new RegExp('^sa'), new RegExp('^se.'), new RegExp('al.$'), new RegExp('ge.$'), new RegExp('i.i$'), new RegExp('v.$'), new RegExp('ym.$')],
+	[new RegExp('..we.'), new RegExp('.a.z.'), new RegExp('.ass.'), new RegExp('.ate.'), new RegExp('.bu.'), new RegExp('.ca$'), new RegExp('.g.i.'), new RegExp('.hl.'), new RegExp('.ina.'), new RegExp('.k.r.'), new RegExp('.mm.'), new RegExp('.mu$'), new RegExp('.nk..'), new RegExp('.ok..'), new RegExp('.p.t.'), new RegExp('.rac.'), new RegExp('.rb..'), new RegExp('.ria.'), new RegExp('.rk.'), new RegExp('.ua..'), new RegExp('.yr.'), new RegExp('^.am'), new RegExp('^.ub'), new RegExp('^mi'), new RegExp('^p.o'), new RegExp('^s.r'), new RegExp('^se'), new RegExp('c.s$'), new RegExp('ca$'), new RegExp('cu.$'), new RegExp('mu$')],
+	[new RegExp('..aj.'), new RegExp('..bu.'), new RegExp('..cr.'), new RegExp('..je.'), new RegExp('..oz.'), new RegExp('.ai..'), new RegExp('.az.'), new RegExp('.c.m.'), new RegExp('.gu..'), new RegExp('.hl..'), new RegExp('.ida.'), new RegExp('.ili.'), new RegExp('.ill.'), new RegExp('.ion.'), new RegExp('.je..'), new RegExp('.m.c.'), new RegExp('.one.'), new RegExp('.ros.'), new RegExp('.sz.'), new RegExp('.t.v.'), new RegExp('.y.t.'), new RegExp('.zy.'), new RegExp('^al.'), new RegExp('^d.s'), new RegExp('^he.'), new RegExp('^j..'), new RegExp('^sc.'), new RegExp('e.o$'), new RegExp('le.$'), new RegExp('lus$'), new RegExp('ti.$')],
+	[new RegExp('..ib.'), new RegExp('..mm.'), new RegExp('..sz.'), new RegExp('..ue.'), new RegExp('.ale.'), new RegExp('.az..'), new RegExp('.b.s.'), new RegExp('.eli.'), new RegExp('.end.'), new RegExp('.icu.'), new RegExp('.kr.'), new RegExp('.n.k.'), new RegExp('.ori.'), new RegExp('.r.f.'), new RegExp('.seu.'), new RegExp('.t.g.'), new RegExp('.ui.'), new RegExp('.ula.'), new RegExp('.up.'), new RegExp('.vo.'), new RegExp('.wal.'), new RegExp('.yr..'), new RegExp('.zy..'), new RegExp('^.se'), new RegExp('^al'), new RegExp('^he'), new RegExp('^j.'), new RegExp('^p.l'), new RegExp('^s.a'), new RegExp('^sc'), new RegExp('j..$')],
+	[new RegExp('..l$'), new RegExp('..rk.'), new RegExp('..zy.'), new RegExp('.all.'), new RegExp('.eud.'), new RegExp('.for.'), new RegExp('.g.o.'), new RegExp('.h.s.'), new RegExp('.h.t.'), new RegExp('.ine.'), new RegExp('.ku.'), new RegExp('.l$'), new RegExp('.ls.'), new RegExp('.m.i.'), new RegExp('.och.'), new RegExp('.on$'), new RegExp('.rop.'), new RegExp('.ung.'), new RegExp('.up..'), new RegExp('.y.l.'), new RegExp('^.il'), new RegExp('^be.'), new RegExp('^j'), new RegExp('^par'), new RegExp('^ro.'), new RegExp('h.s$'), new RegExp('l$'), new RegExp('lis$'), new RegExp('on$'), new RegExp('r.m$'), new RegExp('u.a$')],
+	[new RegExp('..ez.'), new RegExp('..ls.'), new RegExp('..mb.'), new RegExp('..vo.'), new RegExp('.ace.'), new RegExp('.ang.'), new RegExp('.c.p.'), new RegExp('.c.y.'), new RegExp('.der.'), new RegExp('.ern.'), new RegExp('.ino.'), new RegExp('.jsi.'), new RegExp('.kr..'), new RegExp('.kt.'), new RegExp('.ps.'), new RegExp('.rk..'), new RegExp('.sto.'), new RegExp('.su..'), new RegExp('.sz..'), new RegExp('.ui..'), new RegExp('.ver.'), new RegExp('.yn.'), new RegExp('^be'), new RegExp('^ha.'), new RegExp('^ka.'), new RegExp('^le.'), new RegExp('^ro'), new RegExp('ens$'), new RegExp('ns.$'), new RegExp('o.i$'), new RegExp('z..$')],
+	[new RegExp('..ps.'), new RegExp('..rb.'), new RegExp('.den.'), new RegExp('.ea$'), new RegExp('.ef.'), new RegExp('.fa.'), new RegExp('.isc.'), new RegExp('.k.i.'), new RegExp('.k.l.'), new RegExp('.lb.'), new RegExp('.ls..'), new RegExp('.ps..'), new RegExp('.r.y.'), new RegExp('.ti$'), new RegExp('.u.d.'), new RegExp('.udo.'), new RegExp('.v.t.'), new RegExp('.y.n.'), new RegExp('^ha'), new RegExp('^ka'), new RegExp('^ko.'), new RegExp('^le'), new RegExp('^mo.'), new RegExp('^n.p'), new RegExp('^pse'), new RegExp('ci.$'), new RegExp('da.$'), new RegExp('ea$'), new RegExp('ra.$'), new RegExp('st.$'), new RegExp('ti$')],
+	[new RegExp('..ev.'), new RegExp('..hl.'), new RegExp('..kt.'), new RegExp('.are.'), new RegExp('.bu..'), new RegExp('.cho.'), new RegExp('.du..'), new RegExp('.ef..'), new RegExp('.eno.'), new RegExp('.ers.'), new RegExp('.lic.'), new RegExp('.mm..'), new RegExp('.q.'), new RegExp('.q..'), new RegExp('.rp.'), new RegExp('.sl.'), new RegExp('.u.h.'), new RegExp('.vo..'), new RegExp('.ym$'), new RegExp('^.ed'), new RegExp('^.eo'), new RegExp('^.is'), new RegExp('^a.t'), new RegExp('^ko'), new RegExp('^m.n'), new RegExp('^mo'), new RegExp('^sp.'), new RegExp('^za.'), new RegExp('ac.$'), new RegExp('on.$'), new RegExp('ym$')],
+	[new RegExp('..fa.'), new RegExp('..ku.'), new RegExp('..oe.'), new RegExp('..rp.'), new RegExp('.b.t.'), new RegExp('.by.'), new RegExp('.fa..'), new RegExp('.hu..'), new RegExp('.ku..'), new RegExp('.man.'), new RegExp('.n.v.'), new RegExp('.nti.'), new RegExp('.olo.'), new RegExp('.p.d.'), new RegExp('.qu.'), new RegExp('.ris.'), new RegExp('.sen.'), new RegExp('.sse.'), new RegExp('.we..'), new RegExp('.z.l.'), new RegExp('^.ch'), new RegExp('^.ha'), new RegExp('^a.a'), new RegExp('^br.'), new RegExp('^sp'), new RegExp('^te.'), new RegExp('^za'), new RegExp('c.e$'), new RegExp('e.u$'), new RegExp('nse$'), new RegExp('s.a$')],
+	[new RegExp('..by.'), new RegExp('..eh.'), new RegExp('..kr.'), new RegExp('..sl.'), new RegExp('..yp.'), new RegExp('.ah.'), new RegExp('.b.$'), new RegExp('.d.t.'), new RegExp('.ica.'), new RegExp('.ifo.'), new RegExp('.ite.'), new RegExp('.kt..'), new RegExp('.lla.'), new RegExp('.ode.'), new RegExp('.ono.'), new RegExp('.pu..'), new RegExp('.sl..'), new RegExp('.sm..'), new RegExp('.tat.'), new RegExp('.yn..'), new RegExp('.z.a.'), new RegExp('.z.e.'), new RegExp('^.em'), new RegExp('^.ic'), new RegExp('^ar.'), new RegExp('^br'), new RegExp('^do.'), new RegExp('^m.r'), new RegExp('^te'), new RegExp('ia.$'), new RegExp('ie.$')],
+	[new RegExp('.eh..'), new RegExp('.ele.'), new RegExp('.ena.'), new RegExp('.epr.'), new RegExp('.ete.'), new RegExp('.ew..'), new RegExp('.idi.'), new RegExp('.l.k.'), new RegExp('.lle.'), new RegExp('.m.o.'), new RegExp('.nej.'), new RegExp('.nie.'), new RegExp('.nth.'), new RegExp('.q...'), new RegExp('.roc.'), new RegExp('.rp..'), new RegExp('.sci.'), new RegExp('.z.r.'), new RegExp('^.k.'), new RegExp('^.om'), new RegExp('^.os'), new RegExp('^.us'), new RegExp('^ar'), new RegExp('^c.n'), new RegExp('^do'), new RegExp('^m.l'), new RegExp('^pro'), new RegExp('^s.e'), new RegExp('am.$'), new RegExp('b.$'), new RegExp('rus$')],
+	[new RegExp('..az.'), new RegExp('.af.'), new RegExp('.ah..'), new RegExp('.bl.'), new RegExp('.cy.'), new RegExp('.e.v.'), new RegExp('.ew.'), new RegExp('.gl.'), new RegExp('.h.m.'), new RegExp('.hal.'), new RegExp('.iel.'), new RegExp('.k.m.'), new RegExp('.kl.'), new RegExp('.lb..'), new RegExp('.p.$'), new RegExp('.p.s.'), new RegExp('.pha.'), new RegExp('.qu..'), new RegExp('.ras.'), new RegExp('.t.d.'), new RegExp('.yt.'), new RegExp('.yt..'), new RegExp('^.k'), new RegExp('^c.a'), new RegExp('^c.l'), new RegExp('^nep'), new RegExp('^s.b'), new RegExp('p.$'), new RegExp('s.e$'), new RegExp('t.r$'), new RegExp('y.i$')],
+	[new RegExp('..cy.'), new RegExp('..j$'), new RegExp('..ok.'), new RegExp('..q.'), new RegExp('..q..'), new RegExp('..zn.'), new RegExp('.alo.'), new RegExp('.ber.'), new RegExp('.ds.'), new RegExp('.ee.'), new RegExp('.ela.'), new RegExp('.eru.'), new RegExp('.gn.'), new RegExp('.j$'), new RegExp('.kl..'), new RegExp('.lar.'), new RegExp('.ld.'), new RegExp('.mat.'), new RegExp('.pro.'), new RegExp('.ron.'), new RegExp('.tal.'), new RegExp('.zn.'), new RegExp('^.nt'), new RegExp('^n.o'), new RegExp('^s.i'), new RegExp('emu$'), new RegExp('ina$'), new RegExp('j$'), new RegExp('or.$'), new RegExp('ria$'), new RegExp('se.$')],
+	[new RegExp('..gl.'), new RegExp('..kl.'), new RegExp('.af..'), new RegExp('.b.o.'), new RegExp('.cul.'), new RegExp('.d.u.'), new RegExp('.ert.'), new RegExp('.f.e.'), new RegExp('.gl..'), new RegExp('.han.'), new RegExp('.ht.'), new RegExp('.i.b.'), new RegExp('.los.'), new RegExp('.n.d.'), new RegExp('.nat.'), new RegExp('.nta.'), new RegExp('.ona.'), new RegExp('.ont.'), new RegExp('.orm.'), new RegExp('.p.c.'), new RegExp('.per.'), new RegExp('.rze.'), new RegExp('.tor.'), new RegExp('.z.i.'), new RegExp('^.ul'), new RegExp('^neo'), new RegExp('^p.a'), new RegExp('^ta.'), new RegExp('d.e$'), new RegExp('r.e$'), new RegExp('t.n$')],
+	[new RegExp('..gn.'), new RegExp('..qu.'), new RegExp('..ua.'), new RegExp('..ui.'), new RegExp('..yn.'), new RegExp('.bl..'), new RegExp('.col.'), new RegExp('.ds..'), new RegExp('.g.t.'), new RegExp('.h.c.'), new RegExp('.ici.'), new RegExp('.jo.'), new RegExp('.k.w.'), new RegExp('.l.z.'), new RegExp('.lis.'), new RegExp('.n.g.'), new RegExp('.ner.'), new RegExp('.of.'), new RegExp('.pp.'), new RegExp('.tin.'), new RegExp('.ug.'), new RegExp('^li'), new RegExp('^li.'), new RegExp('^ta'), new RegExp('^v.r'), new RegExp('^ve.'), new RegExp('ium$'), new RegExp('n.i$'), new RegExp('rum$'), new RegExp('tes$'), new RegExp('ymi$')],
+	[new RegExp('..bl.'), new RegExp('..d$'), new RegExp('..ew.'), new RegExp('..ht.'), new RegExp('..ld.'), new RegExp('.b.u.'), new RegExp('.cy..'), new RegExp('.d$'), new RegExp('.gn..'), new RegExp('.h.u.'), new RegExp('.k.v.'), new RegExp('.ld..'), new RegExp('.mu..'), new RegExp('.ng$'), new RegExp('.nin.'), new RegExp('.of..'), new RegExp('.oru.'), new RegExp('.por.'), new RegExp('.s.y.'), new RegExp('.tar.'), new RegExp('^.v.'), new RegExp('^a.r'), new RegExp('^ve'), new RegExp('a.s$'), new RegExp('c.a$'), new RegExp('cus$'), new RegExp('d$'), new RegExp('ene$'), new RegExp('ng$'), new RegExp('nia$'), new RegExp('w..$')],
+	[new RegExp('..ds.'), new RegExp('..wy.'), new RegExp('.c.c.'), new RegExp('.car.'), new RegExp('.cen.'), new RegExp('.ht..'), new RegExp('.jo..'), new RegExp('.ln.'), new RegExp('.ole.'), new RegExp('.phi.'), new RegExp('.pp..'), new RegExp('.r.w.'), new RegExp('.ram.'), new RegExp('.sh.'), new RegExp('.sim.'), new RegExp('.uk.'), new RegExp('.w.$'), new RegExp('.wy.'), new RegExp('.y.h.'), new RegExp('^.ap'), new RegExp('^.ez'), new RegExp('^.v'), new RegExp('^b.r'), new RegExp('^bo.'), new RegExp('^gr.'), new RegExp('^m.c'), new RegExp('s.i$'), new RegExp('t.a$'), new RegExp('w.$'), new RegExp('y.h$'), new RegExp('yc.$')]
+];
+let readline = require('readline');
+function checkFile(file){
+	try {
+		return(fs.statSync(file).isFile());
+	} catch(error){
+		return(false);
+	}
+}
+function flatten(x){
+	return(deburr(x.normalize('NFC').toLowerCase()).replace(/[ɨⅱaắằẵẳặấầẫẩậǎảȃạªbcdḍeếềễểệẽẻẹəfgǵǧhḩḥiǐỉịjkḱlḷmnṅṇoốồỗổộỏọơớờỡởợºpqrṛṟsṡșṣtțṭṯuǔủụưứừữửựvwxyỳỹȳỷzẓ]/g, function(y){
+		return({
+			'ɨ': 'i',
+			'ⅱ': 'i',
+			'a': 'a',
+			'ắ': 'a',
+			'ằ': 'a',
+			'ẵ': 'a',
+			'ẳ': 'a',
+			'ặ': 'a',
+			'ấ': 'a',
+			'ầ': 'a',
+			'ẫ': 'a',
+			'ẩ': 'a',
+			'ậ': 'a',
+			'ǎ': 'a',
+			'ả': 'a',
+			'ȃ': 'a',
+			'ạ': 'a',
+			'ª': 'a',
+			'b': 'b',
+			'c': 'c',
+			'd': 'd',
+			'ḍ': 'd',
+			'e': 'e',
+			'ế': 'e',
+			'ề': 'e',
+			'ễ': 'e',
+			'ể': 'e',
+			'ệ': 'e',
+			'ẽ': 'e',
+			'ẻ': 'e',
+			'ẹ': 'e',
+			'ə': 'e',
+			'f': 'f',
+			'g': 'g',
+			'ǵ': 'g',
+			'ǧ': 'g',
+			'h': 'h',
+			'ḩ': 'h',
+			'ḥ': 'h',
+			'i': 'i',
+			'ǐ': 'i',
+			'ỉ': 'i',
+			'ị': 'i',
+			'j': 'j',
+			'k': 'k',
+			'ḱ': 'k',
+			'l': 'l',
+			'ḷ': 'l',
+			'm': 'm',
+			'n': 'n',
+			'ṅ': 'n',
+			'ṇ': 'n',
+			'o': 'o',
+			'ố': 'o',
+			'ồ': 'o',
+			'ỗ': 'o',
+			'ổ': 'o',
+			'ộ': 'o',
+			'ỏ': 'o',
+			'ọ': 'o',
+			'ơ': 'o',
+			'ớ': 'o',
+			'ờ': 'o',
+			'ỡ': 'o',
+			'ở': 'o',
+			'ợ': 'o',
+			'º': 'o',
+			'p': 'p',
+			'q': 'q',
+			'r': 'r',
+			'ṛ': 'r',
+			'ṟ': 'r',
+			's': 's',
+			'ṡ': 's',
+			'ș': 's',
+			'ṣ': 's',
+			't': 't',
+			'ț': 't',
+			'ṭ': 't',
+			'ṯ': 't',
+			'u': 'u',
+			'ǔ': 'u',
+			'ủ': 'u',
+			'ụ': 'u',
+			'ư': 'u',
+			'ứ': 'u',
+			'ừ': 'u',
+			'ữ': 'u',
+			'ử': 'u',
+			'ự': 'u',
+			'v': 'v',
+			'w': 'w',
+			'x': 'x',
+			'y': 'y',
+			'ỳ': 'y',
+			'ỹ': 'y',
+			'ȳ': 'y',
+			'ỷ': 'y',
+			'z': 'z',
+			'ẓ': 'z'
+		}[y]); })
+	);
+}
+for(let k = process.argv.length-1; k >= 0; k--){
+	if(process.argv[k] === '-i'){
+		if(checkFile(process.argv[k+1]) === true){
+			i = process.argv[k+1];
+		}
+	}
+}
+if(Object.prototype.toString.call(i) === '[object String]'){
+	let buffer = [];
+	let input = readline.createInterface({
+		input: fs.createReadStream(i),
+		output: process.stdout,
+		terminal: false
+	});
+	input.on('line', function(line){
+		let x = flatten(line.trim()).split(',');
+		if(x.length === 2){
+			let syllables = new Int32Array(pseudosyllables.length).fill(0);
+			for(let k = pseudosyllables.length-1; k >= 0; k--){
+				for(let j = pseudosyllables[k].length-1; j >= 0; j--){
+					syllables[k] = syllables[k] << 1;
+					if((x[1].split(pseudosyllables[k][j]).length-1) > 0){
+						syllables[k] = syllables[k] | 1;
+					}
+				}
+			}
+			buffer.push(x[0] + ',' + syllables.join(','));
+		}
+	}).on('close', function(){
+		process.stdout.write(buffer.join('\n') + '\n', 'UTF8');
+	});
+} else {
+	let o	=	'\nA JavaScript to pseudosyllablize text.\n'
+			+	'Input data should have class ID and input word separated by a comma.\n'
+			+	'usage: scientificNames-pseudosyllalize.js -i input.csv\n\n';
+	process.stderr.write(o, 'UTF8');
+}

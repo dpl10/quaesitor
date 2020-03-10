@@ -1,0 +1,27 @@
+No.
+Species
+200 400 600 800 1000 1200 1400 1600 1800 2000 2200 2400 2600 2800
+No.
+Trap-nights
+Fig. 3.
+Species accumulation curve for nonvolant small mammals on Camiguin Island.
+The points shown are for Sites 1 and 3 to 6. as described in the text.
+the island reached a peak of eight species (including five nonnative species) by the end of sampling at the second site (1055 trap-nights) and showed no further gain as we approached the total of nearly 2800 trap-nights.
+Local hunters either were unfamiliar with squirrels or knew them from Mindanao; given their conspicuousness (Heaney et al, unpubl. data), they are very unlikely to be present.
+We conclude that the island is unlikely to support other species of small mammals that are present on Mindanao, including gymnures (Podogymnura), tree shrews (Urogale), squirrels, or murid rodents (eg, Batomys, Limnomys, and Tarsomys).
+Further, the sampling along the elevational gradients was sufficiently intense that we are likely to have an accurate assessment of the pattern of species richness above about 800 m, although it must be noted that extensive habitat destruction at lower elevations may have had an extensive impact on the current patterns (discussed below).
+Medium and Large Mammals — We collected information only on the presence and absence of large mammals and a mixed set of medium-sized species (none of which are readily captured in traps such as the ones we used), not on detailed habitat use.
+We observed carefully during all our time in the field for any evidence of additional species, and we interviewed many residents of the islands and showed them photos of potential species; some of these residents are active hunters.
+Neither we nor our informants had any evidence for tarsiers, flying lemurs, or deer on the island, though many people knew of deer and tarsiers on Mindanao, and a few knew of flying squirrels and flying lemurs.
+We consider it unlikely that species other than those listed here are present given the voucher specimens we
+obtained and the concordance between our specimens and the information received from local hunters.
+Thus, we conclude that deer are absent, along with the smaller but conspicuous species such as tarsiers, squirrels, and flying lemurs.
+Elevational Patterns
+Though our limited netting prevents us from commenting on the patterns of diversity and abundance of bats along the elevational gradient on Camiguin, our trapping data (Table 1) provide a reasonably complete picture of the general patterns among nonvolant species.
+The highest density we encountered was at Site 3, in agricultural land at ca.
+150 m. However, these were all nonnative rats and a shrew, representing only three species, a pattern that we have often seen (eg, Heaney et al, 1989; Rickart et al, 1991).
+The five native small mammal species were all present (or suspect to be present) from 1000 to 1300 m and declined in species richness to two species near the peak of Mt. Timpoong at Site 8 (Table 1).
+Density (measured as the number captured per 100 trap-nights) more than doubled from 1000 to 1275 m, then fell to a much lower level near the peak at 1475 m. However, much of the change in density was driven by the remarkably large numbers of Suncus murium at the upper elevations; they were not taken at 1000 or 1200 m (though they were taken at 150 m), were fairly common at 1300 and 1475 m, and were exceptionally abundant at 1275 m, where we often saw and heard them during the day.
+These patterns for species richness, though limited in extent, are similar to those from elsewhere in the Philippines, where species
+44
+FIELDIANA: ZOOLOGY

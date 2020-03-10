@@ -4,9 +4,19 @@ const LRUCache = require('mnemonist/lru-cache'); /* an import statement causes p
 import { Classifier } from './classifier';
 import { Classifiers } from './model';
 import { Extractor } from './extractor';
-import { RegularExpression } from './regular-expression';
+import { RegularExpression, bufferCapture, insertSpace } from './regular-expression';
 import { ScientificName } from './scientific-name';
 import { XXhash } from './xxhash';
+export class Abbreviation {
+	[key: string]: AbbreviationRecord;
+}
+export class AbbreviationRecord {
+	[key: string]: string;
+	expansion: string;
+	public constructor(init ?: Partial<AbbreviationRecord>){
+		Object.assign(this, init);
+	}
+}
 export class Quaesitor {
 	private classifier: Classifier = new Classifier();
 	private extract: Extractor = new Extractor();
@@ -15,6 +25,26 @@ export class Quaesitor {
 	private regularExpression: RegularExpression = new RegularExpression();
 	private xxhash: XXhash = new XXhash();
 	constructor(){
+	}
+	private abbreviate(a: Abbreviation, g: string, s: string, o: boolean): Abbreviation {
+		const lg = g.length-1;
+		const ls = s.length-1;
+		for(let k = 2; k > 0; k--){ /* generic and specific abbreviations up to 2 letters */
+			const ge: string = g.substring(0, (lg < k) ? lg : k) + '.';
+			if(o === true){
+				const sp: string = s.substring(0, (ls < k) ? ls : k) + '.';
+				a[this.formatSpecies(g, sp)] = new AbbreviationRecord({
+					expansion: s
+				});
+				a[this.formatSpecies(ge, sp)] = new AbbreviationRecord({
+					expansion: s
+				});
+			}
+			a[ge] = new AbbreviationRecord({
+				expansion: g
+			});
+		}
+		return(a);
 	}
 	private alpha(x: string, y: string): number {
 		if(x < y){
@@ -26,66 +56,60 @@ export class Quaesitor {
 		}
 	}
 	public async extractSpecies(x: string, htmlFormat: boolean): Promise<Array<string>> {
-		const a: any = {};
-		const h: any = {};
+		let a: Abbreviation = new Abbreviation();
 		let m: RegExpExecArray|null;
-		const u: Array<string> = [];
-		const y = x.normalize('NFC').replace(this.regularExpression.html, '').replace(this.regularExpression.lineEnding, '\n').replace(this.regularExpression.separator, ' ').replace(this.regularExpression.dash, '-').replace(/-+/g, '-').replace(/ -\n/g, ' - ').replace(/-\n/g, '').replace(/\n/g, ' ').replace(/ +/g, ' ');
+		const e: Array<ScientificName> = [];
+		const y = ' ' + x.normalize('NFC').replace(this.regularExpression.html, '').replace(this.regularExpression.unusualPunctuation, ' ').replace(this.regularExpression.lineEnding, '\n').replace(this.regularExpression.separator, ' ').replace(this.regularExpression.missingSpace, insertSpace).replace(this.regularExpression.dash, '-').replace(this.regularExpression.dashPlus, '-').replace(this.regularExpression.spaceDashEnd, ' - ').replace(this.regularExpression.dashEnd, '').replace(this.regularExpression.symbolRemoval, bufferCapture).replace(this.regularExpression.pluralPossesive, ' ').replace(this.regularExpression.synonym, '').replace(this.regularExpression.questionable, '').replace(this.regularExpression.endLine, ' ').replace(this.regularExpression.spacePlus, ' ');
 		while((m = this.regularExpression.nomenNudem.exec(y)) !== null){
-			const g = this.regularExpression.abbreviatedGenus(m[1]);
-			const s = this.regularExpression.abbreviatedSpecies(m[2]);
+			let c: boolean = false;
+			let m1: string = m[1];
+			let m2: string = m[2];
+			if((m[1] == null) && (m[2] == null)){
+				c = true;
+				m1 = m[3];
+				m2 = m[4];
+			}
+			const g: boolean = this.regularExpression.abbreviatedGenus(m1, c);
+			const s: boolean = this.regularExpression.abbreviatedSpecies(m2, c);
 			let n: ScientificName = new ScientificName();
 			const q = y.substr(m.index);
 			if((g === true) && (s === true)){
-				n = this.extract.scientificName(q);
+				n = this.extract.scientificName(q, c);
 				if(n.extracted === true){
 					if((n.hasOwnProperty('Genus') === true) && (a.hasOwnProperty(n.Genus) === true)){
-						n.Genus = a[n.Genus];
+						n.Genus = a[n.Genus].expansion;
 					}
-					if((n.extracted === true) && (n.hasOwnProperty('Genus') === true) && (n.hasOwnProperty('species') === true)){
+					if((n.hasOwnProperty('Genus') === true) && (n.hasOwnProperty('species') === true)){
 						const sp = this.formatSpecies(n.Genus, n.species);
 						if(a.hasOwnProperty(sp) === true){
-							n.species = a[sp];
+							n.species = a[sp].expansion;
 						}
 					}
 				}
 			} else if(g === true){
-				if(await this.queryUninomial(m[2]) === true){
-					n = this.extract.scientificName(q);
+				if(await this.queryUninomial(m2) === true){
+					n = this.extract.scientificName(q, c);
 					if((n.extracted === true) && (n.hasOwnProperty('Genus') === true) && (a.hasOwnProperty(n.Genus) === true)){
-						n.Genus = a[n.Genus];
+						n.Genus = a[n.Genus].expansion;
+						if(n.hasOwnProperty('species') === true){
+							a = this.abbreviate(a, n.Genus, n.species, false);
+						}
 					}
 				}
 			} else if(s === true){
-				if(await this.queryUninomial(m[1]) === true){
-					n = this.extract.scientificName(q);
+				if(await this.queryUninomial(m1) === true){
+					n = this.extract.scientificName(q, c);
 					if((n.extracted === true) && (n.hasOwnProperty('Genus') === true) && (n.hasOwnProperty('species') === true)){
 						const sp = this.formatSpecies(n.Genus, n.species);
 						if(a.hasOwnProperty(sp) === true){
-							n.species = a[sp];
+							n.species = a[sp].expansion;
 						}
 					}
 				}
-			} else if(await this.queryBinomial(m[1], m[2]) === true){
-				n = this.extract.scientificName(q);
+			} else if(await this.queryBinomial(m1, m2) === true){
+				n = this.extract.scientificName(q, c);
 				if((n.extracted === true) && (n.hasOwnProperty('Genus') === true) && (n.hasOwnProperty('species') === true)){
-					const lg = n.Genus.length-1;
-					const ls = n.species.length-1;
-					for(let k = 3; k > 0; k--){
-						let kg = k;
-						let ks = k;
-						if(lg < k){
-							kg = lg;
-						}
-						if(ls < k){
-							ks = ls;
-						}
-						const ge: string = n.Genus.substring(0, kg) + '.';
-						const sp: string = n.species.substring(0, ks) + '.';
-						a[ge] = n.Genus;
-						a[this.formatSpecies(n.Genus, sp)] = n.species;
-						a[this.formatSpecies(ge, sp)] = n.species;
-					}
+					a = this.abbreviate(a, n.Genus, n.species, true);
 				}
 			}
 			if(n.extracted === true){
@@ -94,15 +118,28 @@ export class Quaesitor {
 						delete(n[p]);
 					}
 				}
-				const f: string = n.formatName(htmlFormat);
-				const h64: string = await this.xxhash.h64(f);
-				if(h.hasOwnProperty(h64) === false){
-					h[h64] = true;
-					u.push(f);
-				}
+				e.push(n);
 			}
 		}
-// test all found genera or species to get additional compbinations species using more permissive threshold?
+		const h: any = {};
+		const u: Array<string> = [];
+		for(let k = e.length-1; k >= 0; k--){
+			if((e[k].hasOwnProperty('Genus') === true) && (this.regularExpression.abbreviatedGenus(e[k].Genus, false) === true) && (a.hasOwnProperty(e[k].Genus) === true)){
+				e[k].Genus = a[e[k].Genus].expansion;
+			}
+			if((e[k].hasOwnProperty('Genus') === true) && (e[k].hasOwnProperty('species') === true) && (this.regularExpression.abbreviatedSpecies(e[k].species, false) === true)){
+				const sp = this.formatSpecies(e[k].Genus, e[k].species);
+				if(a.hasOwnProperty(sp) === true){
+					e[k].species = a[sp].expansion;
+				}
+			}
+			const f: string = e[k].formatName(htmlFormat);
+			const h64: string = await this.xxhash.h64(f);
+			if(h.hasOwnProperty(h64) === false){
+				h[h64] = true;
+				u.push(f);
+			}
+		}
 		return(u.sort(this.alpha));
 	}
 	private formatSpecies(g: string, s: string): string {
@@ -112,21 +149,25 @@ export class Quaesitor {
 		this.classifier.load(x);
 	}
 	private async queryBinomial(x: string, y: string): Promise<boolean> {
-		const s = x + ' ' + y;
-		if(this.queryCacheBinomial.has(s) === true){
-			return(this.queryCacheBinomial.get(s));
+		const z = this.formatSpecies(x, y).toLowerCase();
+		if(this.queryCacheBinomial.has(z) === true){
+			return(this.queryCacheBinomial.get(z));
+		} else if(await this.classifier.queryKLUGE(z) === 1){
+			this.queryCacheBinomial.set(z, false);
+			return(false);
 		} else {
-			const r: boolean = this.classifier.queryBELDA(await this.classifier.queryEnsemble(x), await this.classifier.queryEnsemble(y));
-			this.queryCacheBinomial.set(s, r);
+			const r: boolean = await this.classifier.queryBEDFFNN(await this.classifier.queryEnsemble(x), await this.classifier.queryEnsemble(y));
+			this.queryCacheBinomial.set(z, r);
 			return(r);
 		}
 	}
 	private async queryUninomial(x: string): Promise<boolean> {
-		if(this.queryCacheUninomial.has(x) === true){
-			return(this.queryCacheUninomial.get(x));
+		const y = x.toLowerCase();
+		if(this.queryCacheUninomial.has(y) === true){
+			return(this.queryCacheUninomial.get(y));
 		} else {
-			const r: boolean = this.classifier.queryUELDA(await this.classifier.queryEnsemble(x));
-			this.queryCacheUninomial.set(x, r);
+			const r: boolean = await this.classifier.queryUEDFFNN(await this.classifier.queryEnsemble(x));
+			this.queryCacheUninomial.set(y, r);
 			return(r);
 		}
 	}

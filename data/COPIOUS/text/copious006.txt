@@ -1,0 +1,33 @@
+BROWN, A. ALCALA, DIESMOS AND E. ALCALA: PLATYMANTIS
+are the result of a base at the University of the Philippines at Los Banos and the continuing work in the forest of the two mountains by Alcala and Diesmos over the period 1994-1996.
+Recently, populations of Platymantis guentheri on Cataduanes Island (Ross and Gonzales 1992) and Panaon Island at the southern tip of Leyte (Gaulke 1994) and a population off. ingeri on Dinagat Island (Rossandlazell 1991) have been reported, but the samples are limited to a few specimens.
+Materials and Methods
+Materials examined include: (1) holotypes of Platymantis guentheri, worcesteri, and ingeri; (2) 17 of the 19 specimens examined by Inger (1954); and (3) most specimens from recent collections that are referable to the guentheri group of species.
+These materials are in the custody of the following institutions: British Museum of Natural History (BMNH), California Academy of Sciences (CAS ORCAS-SU), Field Museum of Natural History (FMNH), Museum of Comparative Zoology (MCZ), United States National Museum (USNM), Delaware Museum of Natural History (DMNH), and Carnegie Museum (CM).
+Morphometric characters, including snout-vent length (SVL), head length (HL), head width (HW), snout length (SNL), diameter of eye (ED), diameter of tympanum (TD), tibia length (TIL), third finger length from proximal edge of basal tubercle (3FL), diameter of third finger disk (3FD), and diameter of third toe disk (3TOD) were measured to the nearest 01 mm using a Helios dial caliper.
+Other morphological characters include: webbing of toes, shape of terminal phalanges, tubercles of hands and feet, skin ornamentation, head shape, vomerine teeth, and color pattern.
+Systematic Section
+Key to guentheri Group Species la.
+Dorsum smooth, without distinct ridges and usually with few tubercles mostly limited to upper eyelids and dorsolateral area
+(Fig. 4A, B) 2
+lb. Dorsum with prominent ridges and scattered tubercles (Fig. 2) 3
+2a.
+Third toe not webbed beyond basal tubercle on outer side of third toe; brown pigmentation of venter prominent on belly as well as head and throat; advertisement call (Fig. 1A) P. banahao
+2b.
+Third toe webbed to midpoint tubercles or beyond on outer side of third toe; brown pigmentation of venter mostly under head and throat; advertisement call (Fig. IB)   P. luzonensis
+3a.
+TIL usually greater than 55% of SVL; 3FD less than 6% of SVL and usually less than 100% of TD; SVL 27-40 mm for males   P. guentheri
+3b.
+TIL usually less than 52 or 54% of SVL; 3FD usually more than 1 15% of TD and 7-10% of SVL; SVL 39-50 mm for males 4
+4a.
+Third toe not webbed beyond basal tubercle on outer side; numerous long ridges on dorsum; snout with few or without tubercles; venter with scattered, small granules P. rabori
+4b.
+Third toe webbed to about midpoint between tubercles or more distal on outer side; few long ridges on dorsum; snout with 2 or 3 rows of tubercles; venter nearly
+smooth; advertisement call (Fig. c)
+P. negrosensis
+The Platymantis guentheri-ingeri Problem.
+— Reexamination of 17 of the 19 specimens assigned to Platymantis guentheri by Inger (1954) indicates that the Mindanao sample includes four examples (CM 3424-25 and FMNH 50571, 50573) that fit the diagnosis of P. ingeri.
+Reexamination of the holotype of Platymantis guentheri along with the small series from Dinagat Island reported as P. ingeri by Ross and Lazell (1991) shows them to be one species that better fits the diagnosis of P. ingeri (Brown and Alcala 1963) than that of P. guentheri (Brown and Alcala 1963, or Inger 1954).
+In view of this fact and because of the avail- ability of larger samples from several islands, a rediagnosis and redescription of Platymantis guentheri is necessary.
+Comparison of the ingeri- like populations of Dinagat, Mindanao, and Bili- ran islands shows them to be in general agreement with the type of guentheri, and they are therefore assigned to that species.
+Because the Bohol population, described as ingeri, re-

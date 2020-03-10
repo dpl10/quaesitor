@@ -1,0 +1,16 @@
+254 p  Jp  WHITEHEAD
+RANGE  Suez Canal, Red Sea (Gulf of Suez), Gulf of Aden (Mukalla, Qishm, Aden), Gulf of Oman, but not recorded from the Persian Gulf ; elsewhere, Indian Ocean from Mauritius to East Indies, and from China, Australia, Micronesia, Polynesia. Specimens
+6 fishes, 97-114 mm, Mukalla (B.M.N.H. 1962326102-107).
+6 fishes, 99-115 mm, Mukalla (B.M.N.H. 1962326111-116).
+3 fishes, 54-58 mm, Aden (B.M.N.H. 1962326108-110).
+1 fish, 119 mm, Gulf of Oman (Z.M.C. Ci Blegvad's S. sindensis).
+2 fishes, 118-119 mm, Gischin, coll. Hein (N.M.V. 1260).
+Sardinella fimbriata (Valenciennes) Sefer, Hashinch, Moomagh (Iran)
+Spratella fimbriata Valenciennes, 1847, Hist. Nat. Poiss, 20  (263) 359, pi. 601 (Type locality
+Malabar)  Sardinella fimbriata  Blegvad, 1944, Danish Sci. Invest. Iran, pt. 3  65, fig. 29 (copied Day)
+(off Fort Dilam) ; Fowler, 1956, Fishes of the Red Sea, 1  66 (on Philippine specimens).
+Note on synonymy.
+Bertin (19440), after an examination of the Valenciennes types of Clupeonia jussieui and Spratella fimbriata, concluded that the two represented a single species, which he believed to have " environ 70 branchiospines a la branche inferieure du premier arc branchial ". But, until the validity and identity of Lacepede's C. jussieu can be definitely confirmed or rejected, it seems best to retain the name fimbriata for the material described here.
+S. jussieu (as understood here, ie. sensu Fowler, 1941, 1956) very closely resembles S. fimbriata. Dutt (i96ia, 1962), who studied the two species off the Waltair Coast of India, stated that S. fimbriata makes its appearance there earlier than 5. gibbosa (ie. S. jussieu), but that at times when the two species coincide, their shoals are almost always discrete (Dutt 1962). He distinguished the two species on gillraker counts which, although increasing slightly with size of fish, remain just distinct (a difference of 2, 2, 3, 6, 6, 5, 8, 5, 2, 4, o, 4 rakers respectively in the 10 mm. groups 30-140 mm. standard length).
+In my material (24 fishes, 87-118 mm) I have assigned specimens with a count of 53-58 rakers to S. jussieu, and those with 60-72 rakers to S. fimbriata. In this size range, Butt's ranges in gillraker counts are respectively 43-60 and 57-77, with average values of 48, 52, 53, 56 for S. jussieu and 63, 66, 69, 70 for S. fimbriata in the 10 mm. groups represented (mean values of 54-9 and 66-5 respectively in my material)
+In the specimens examined here, there are no other meristic differences between the two species, and proportional measurements are almost identical except for a slightly shorter snout in S. jussieu (6-4-7-3 per cent, of S.L. ; cf. (6-7) 7-3-8-0 in S. fimbriata). Fowler (1956) finds a difference in numbers of scales in lateral series, S. fimbriata having a lower count (36-38 ; cf. 40-42), but counts are not always possible or perhaps accurate in these fishes.

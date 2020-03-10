@@ -1,0 +1,6 @@
+syntax = "proto3";
+message FilterRaw {
+	repeated fixed32 f = 1; /* Bloom filter */
+	int32 k = 2; /* number of hash functions */
+	int32 m = 3; /* number of bits in the filter */
+}

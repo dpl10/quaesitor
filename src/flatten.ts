@@ -1,5 +1,7 @@
 /* imports from node_modules */
 import { deburr } from 'lodash';
+/* imports from module */
+import { RegularExpression } from './regular-expression';
 export class Flatten {
 	private exchage: any = {
 		'ɨ': 'i',
@@ -103,10 +105,11 @@ export class Flatten {
 		'z': 'z',
 		'ẓ': 'z'
 	};
+	private regularExpression: RegularExpression = new RegularExpression();
 	constructor(){
 	}
 	public squash(x: string): string {
-		return(deburr(x.normalize('NFC').toLowerCase()).replace(/[ɨⅱaắằẵẳặấầẫẩậǎảȃạªbcdḍeếềễểệẽẻẹəfgǵǧhḩḥiǐỉịjkḱlḷmnṅṇoốồỗổộỏọơớờỡởợºpqrṛṟsṡșṣtțṭṯuǔủụưứừữửựvwxyỳỹȳỷzẓ]/g, (y: string): string => {
+		return(deburr(x.normalize('NFC').toLowerCase()).replace(this.regularExpression.cruff, (y: string): string => {
 			return(this.exchage[y]); })
 		);
 	}

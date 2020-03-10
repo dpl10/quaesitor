@@ -1,0 +1,27 @@
+Southeast Asia
+Chansang H, Satapoomin U, Poovachiranon S (eds) 11999b).
+Coral Reef Maps of Thailand. Volume 2. Andaman Sea. Coral Reef Management Programme, Department of Fisheries. In Thai language) Hydrographic Office (1975). Mergui Archipelago. British Admiralty Chart No. 216. 1300 000. September 1975. Taunton, UK,
+Maps 10b, loclodloe
+Coral reef data are largely based on arcs from Petroconsultants SA (1990). Some additional areas were added by experts during the Regional Reefs at Risk workshop in Manila, 2000. For the Riau Archipelago high resolution data were generously provided through the Regional Reefs at Risk project. These are based on Landsat TM at a working scale of 130 000.
+but further reefs were added based on simple annotation provided by Cheng-feng Dai (Professor, Institute of Oceanography, Taiwan).
+For China, coral reef data have been taken as arcs from Petroconsultants SA 11990. For Vietnam, coral reef data were provided on a series of hand annotated base maps (various scales between approximately 1  1 00 000 and 1 750 000), based on the expert knowledge of Vo Si Tuan (Head, Department of Marine Living Resources, Institute of Oceanography, Vietnam). Gaps in this map coverage were filled with data from Petroconsultants SA 11990).
+Environment Agency (1981-1987), Actual Vegetation Map, Okinawa. 1-29. 150 000. The 3rd National Survey on the Natural Environment (Vegetation). Environment Agency, Japan, 29-map series on 26 sheets).
+Maps 10b and 10c
+For large parts of Malaysia, coral reef data have been taken as arcs from Petroconsultants SA 11990). For Sabah higher resolution reef polygons were kindly made available through the Regional Reefs at Risk Southeast Asia project, which plot reefs at a scale of 1200 000. For Brunei coral reef data have been taken from De Silva et al 11992). De Silva MORN, Wright RAD. Matdanan HJH. Sharifuddin PHY,
+Agbayani CV 11992). Coastal Environmental Sensitivity
+Mapping of Brunei Darussalam. Department of Fisheries.
+Ministry of Industry and Primary Resources and Brunei Shell
+Petroleum Company, Brunei Darussalam.
+Maps 1 0f and log
+The coral reef map for the Philippines is largely based on two sources: processed satellite imagery kindly provided by the National Mapping and Resource Information Authority INAMRIAL and further details from Petroconsultants SA 11990). The former data were prepared from SPOT images taken in 1987, at a scale of 1250 000. Unfortunately expert analysis showed significant reef areas were missing from this analysis, so gaps were filled with the lower resolution Petroconsultants SA data.
+In addition, the sub-surface barrier reef system on the western coast of Palawan was mapped based on Hydrographic Office 11985). This data is based on Philippine Government charts to 1976, Admiralty surveys of 1850-5and US surveys to 1937. As these are sub-surface reefs, they have not been included in the reef area calculations. Hydrographic Office (1985). South China Sea  Palawan. British
+Admiralty Chart No. 967. 1725 000. November 1985.
+Taunton, UK. NAMRIA (1988). Land Cover Maps, 1250 000. National
+Mapping and Resources Information Authority, Manila,
+Republic of the Philippines.
+Map 1 0h
+Data showing reef areas in the Spratly Islands were prepared by staff at the University of the Philippines Marine Sciences Institute, using source materials at a scale of 1250 000. It is possible to distinguish between surface and sub-surface reefs in this dataset, and only the former have been used in the calculation of reef areas.
+Map loi
+For Japan, coral reefs and mangrove areas for all the southern islands are taken from Environment Agency (1981-1987). For Taiwan, Petroconsultants SA (19901 was used as a base map.
+See Technical notes, page IOI
+

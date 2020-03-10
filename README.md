@@ -1,6 +1,9 @@
 # QUAESITOR
 *QUAESITOR* locates Latin scientific names in Chinese, Czech, Danish, Dutch, English, French, German, Italian, Japanese, Latin, Norwegian, Polish, Portuguese, Russian, Spanish, and Swedish text (approximately 96% of biodiversity titles). It uses a combination of pattern matching (regular expressions), a Bloom filter, and a trio of complementary ensembled neural networks. A [live version](https://www.nybg.org/files/scientists/dlittle/quaesitor-web/) of the web interface is hosted at the New York Botanical Garden.
 
+![Alt text](./data/fig1.svg)
+<img src="./data/fig1.svg">
+
 ### install
 `npm install quaesitor --save`
 
