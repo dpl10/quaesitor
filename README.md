@@ -3,10 +3,10 @@
 
 <table>
 	<tr>
-		<td width="40%"><img src="./data/fig1.svg"></td>
-		<td><img src="./data/fig2.svg"></td>
+		<td><img width="30em" src="./data/fig1.svg"></td>
+		<td><img width="50em" src="./data/fig2.svg"></td>
 	</tr><tr>
-		<td width="40%"><sub>Fig. 1. Precision–recall curves for all possible cutoff values calculated from validation data (5% of the total dataset). A 5% random error was added to the inherent BF error rate to mimic the effect of missing entries thereby depressing the BF, uEDFFNN, and bEDFFNN curves. The binominal (bEDFFNN) and uninominal (uEDFFNN) ensemble classifiers perform better than any of the input classifiers demonstrating complementarity.</sub></td>
+		<td><sub>Fig. 1. Precision–recall curves for all possible cutoff values calculated from validation data (5% of the total dataset). A 5% random error was added to the inherent BF error rate to mimic the effect of missing entries thereby depressing the BF, uEDFFNN, and bEDFFNN curves. The binominal (bEDFFNN) and uninominal (uEDFFNN) ensemble classifiers perform better than any of the input classifiers demonstrating complementarity.</sub></td>
 		<td><sub>Fig. 2. Precision versus recall for (A) A100, (B) S800, and (C) COPIOUS datasets using LINNAEUS (L), NETINETI (N), QUAESITOR (Q), SPECIES (S), and TAXONFINDER (T). Error bars indicate 95% confidence intervals. Confidence area opacity indicates relative processing time on a log scale with darker colors indicating slower programs.</sub><td>
 	</tr>
 </table>
