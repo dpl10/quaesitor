@@ -121,7 +121,7 @@ arrows(S800[,4], S800[,1], S800[,4], S800[,3], length = 0.03, angle = 90, code =
 arrows(S800[,4], S800[,1], S800[,4], S800[,2], length = 0.03, angle = 90, code = 2, col = 'black', lty = 1, lwd = 0.8)
 arrows(S800[,4], S800[,1], S800[,5], S800[,1], length = 0.03, angle = 90, code = 2, col = 'black', lty = 1, lwd = 0.8)
 arrows(S800[,4], S800[,1], S800[,6], S800[,1], length = 0.03, angle = 90, code = 2, col = 'black', lty = 1, lwd = 0.8)
-rect(S800[,5], S800[,2], S800[,6], S800[,3], col = makeTransparent('#56ae6c', ((log(S800[,7])-min(log(S800[,7])))/max(log(S800[,7]))*512)+48), angle = 0, border = NA)
+rect(S800[,5], S800[,2], S800[,6], S800[,3], col = makeTransparent('#56ae6c', ((log(S800[,7])-min(log(S800[,7])))/max(log(S800[,7]))*512)+64), angle = 0, border = NA)
 points(S800[,4], S800[,1], pch = 22, col = 'black', cex = 1.25, bg = 'black')
 text(S800[,4], S800[,1], labels = p, cex = 0.5, col = 'white', font = 2)
 ### COPIOUS
@@ -152,7 +152,7 @@ arrows(COPIOUS[,4], COPIOUS[,1], COPIOUS[,4], COPIOUS[,3], length = 0.03, angle 
 arrows(COPIOUS[,4], COPIOUS[,1], COPIOUS[,4], COPIOUS[,2], length = 0.03, angle = 90, code = 2, col = 'black', lty = 1, lwd = 0.8)
 arrows(COPIOUS[,4], COPIOUS[,1], COPIOUS[,5], COPIOUS[,1], length = 0.03, angle = 90, code = 2, col = 'black', lty = 1, lwd = 0.8)
 arrows(COPIOUS[,4], COPIOUS[,1], COPIOUS[,6], COPIOUS[,1], length = 0.03, angle = 90, code = 2, col = 'black', lty = 1, lwd = 0.8)
-rect(COPIOUS[,5], COPIOUS[,2], COPIOUS[,6], COPIOUS[,3], col = makeTransparent('#56ae6c', ((log(COPIOUS[,7])-min(log(COPIOUS[,7])))/max(log(COPIOUS[,7]))*512)+48), angle = 0, border = NA)
+rect(COPIOUS[,5], COPIOUS[,2], COPIOUS[,6], COPIOUS[,3], col = makeTransparent('#56ae6c', ((log(COPIOUS[,7])-min(log(COPIOUS[,7])))/max(log(COPIOUS[,7]))*512)+64), angle = 0, border = NA)
 points(COPIOUS[,4], COPIOUS[,1], pch = 22, col = 'black', cex = 1.25, bg = 'black')
 text(COPIOUS[,4], COPIOUS[,1], labels = p, cex = 0.5, col = 'white', font = 2)
 mtext('Recall', 1, line = 0, cex = cM, outer = TRUE, col = 'black')
