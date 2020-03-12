@@ -2,11 +2,12 @@
 const LRUCache = require('mnemonist/lru-cache'); /* an import statement causes problems */
 //#ifdef NODE
 import * as tf from '@tensorflow/tfjs-node';
+import { Tensor } from '@tensorflow/tfjs-node';
 //#else
 import * as tf from '@tensorflow/tfjs';
+import { Tensor } from '@tensorflow/tfjs';
 //#endif
 import { LTTB } from 'downsample';
-import { Tensor } from '@tensorflow/tfjs';
 import { XYDataPoint } from 'downsample/dist/types';
 /* imports from module */
 import { BloomFilter } from './bloom-filter';

@@ -1,6 +1,9 @@
 /* imports from node_modules */
+//#ifdef NODE
+import { InferenceModel } from '@tensorflow/tfjs-node';
+//#else
 import { InferenceModel } from '@tensorflow/tfjs';
-/* imports from module */
+//#endif
 export class Properties {
 	[key: string]: InferenceModel|boolean|number|string;
 	inputInt: boolean;
