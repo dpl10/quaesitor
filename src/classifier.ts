@@ -7,8 +7,7 @@ import { Tensor } from '@tensorflow/tfjs-node';
 import * as tf from '@tensorflow/tfjs';
 import { Tensor } from '@tensorflow/tfjs';
 //#endif
-import { LTTB } from 'downsample';
-import { XYDataPoint } from 'downsample/dist/types';
+import { LTTB, XYDataPoint } from 'downsample';
 /* imports from module */
 import { BloomFilter } from './bloom-filter';
 import { Classifiers, Model, ModelKey } from './model';
@@ -23,6 +22,8 @@ modelJSON.ecnn.json = require('./assets/ecnn.json');
 modelJSON.lcnn.json = require('./assets/lcnn.json');
 modelJSON.pdffnn.json = require('./assets/pdffnn.json');
 modelJSON.uedffnn.json = require('./assets/uedffnn.json');
+/* speed (maybe) */
+tf.enableProdMode();
 export class Classifier {
 	private bf: BloomFilter = new BloomFilter();
 	private flatten: Flatten = new Flatten();
@@ -105,7 +106,7 @@ export class Classifier {
 						y: phones[k][x[j]]
 					};
 				}
-				const o: Array<XYDataPoint> = LTTB(d, w);
+				const o: Array<XYDataPoint> = LTTB(d, w) as Array<XYDataPoint>;
 				const i: number = w*k;
 				for(let j = o.length-1; j >= 0; j--){
 					y[i+j] = o[j].y;

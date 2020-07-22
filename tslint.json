@@ -114,6 +114,7 @@
 		"no-unnecessary-initializer": true,
 		"no-unsafe-finally": true,
 		"no-unused-expression": true,
+		"no-unused-variable": true,
 		"no-var-keyword": true,
 		"object-literal-sort-keys": false,
 		"one-line": [

@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const copyPlugin = require('copy-webpack-plugin');
+const TSLintPlugin = require('tslint-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 const webpack = require('webpack');
@@ -20,18 +21,23 @@ const commonConfig = {
 				test: /\.js$/,
 				use: 'source-map-loader'
 			}, {
-				enforce: 'pre',
-				exclude: /node_modules/,
 				test: /\.ts$/,
-				use: 'tslint-loader'
+				use: {
+					loader: 'ts-loader',
+					options: {
+						allowTsInNodeModules: false,
+						configFile: path.resolve('tsconfig.json'),
+						errorFormatter: function customErrorFormatter(error, colors) {
+							const messageColor = error.severity === 'warning' ? colors.bold.yellow : colors.bold.red;
+							return ('Does not work for tslint.... ' + messageColor(Object.keys(error).map(key => `${key}: ${error[key]}`)));
+						},
+						onlyCompileBundledFiles: true
+					}
+				}
 			}, {
-				exclude: /node_modules/,
-				test: /\.ts$/,
-				use: 'awesome-typescript-loader'
-			}, {
-				exclude: /node_modules/,
+				exclude: path.resolve(__dirname, 'node_modules'),
 				loader: require.resolve('webpack-preprocessor-loader'),
-            options: {
+				options: {
 					defines: {
 						WEB: true
 					}
@@ -50,10 +56,15 @@ const commonConfig = {
 		hints: false
 	},
 	plugins: [
-		new copyPlugin([{
-			from: 'assets/*.pbf',
-			to: DESTINATION
-		}]),
+		new copyPlugin({
+			patterns: [{
+				from: 'assets/*.pbf',
+				to: DESTINATION
+			}]
+		}),
+		new TSLintPlugin({
+			files: ['src/*.ts']
+		})
 	],
 	resolve: {
 		extensions: ['.ts', '.js'],
@@ -69,7 +80,7 @@ browserConfig.output.filename = 'quaesitor-broswer.js';
 const nodeConfig = _.cloneDeep(commonConfig);
 nodeConfig.externals.push(nodeExternals());
 nodeConfig.output.filename = 'quaesitor-node.js';
-nodeConfig.module.rules[3].options.defines.NODE = true;
+nodeConfig.module.rules[2].options.defines.NODE = true;
 nodeConfig.target = 'node';
 module.exports = [
 	browserConfig,
