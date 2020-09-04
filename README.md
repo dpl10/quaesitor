@@ -36,7 +36,7 @@ console.log(await q.extractSpecies('Text with one or more Latin Scientific names
 Use the [quaesitor.service](https://github.com/dpl10/quaesitor-web/blob/master/src/app/quaesitor.service.ts) in your own Angular project, see an implementation example in [quaesitor.component](https://github.com/dpl10/quaesitor-web/blob/master/src/app/quaesitor/quaesitor.component.ts).
 
 ### citation
-If you use this software, please cite: Little, D.P. 2020. Recognition of Latin scientific names using artificial neural networks. [Applications in Plant Sciences.](https://doi.org/ADD_DOI_HERE)
+If you use this software, please cite: Little, D.P. 2020. Recognition of Latin scientific names using artificial neural networks. [Applications in Plant Sciences 8(7): e11378.](https://doi.org/10.1002/aps3.11378)
 
 ### license
 [MIT](https://github.com/dpl10/quaesitor/blob/master/LICENSE)

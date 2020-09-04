@@ -1,8 +1,9 @@
 const _ = require('lodash');
 const copyPlugin = require('copy-webpack-plugin');
-const TSLintPlugin = require('tslint-webpack-plugin');
+const esmPlugin = require('@purtuga/esm-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
+const TSLintPlugin = require('tslint-webpack-plugin');
 const webpack = require('webpack');
 const ROOT = path.resolve( __dirname, 'src' );
 const DESTINATION = path.resolve( __dirname, 'dist' );
@@ -67,16 +68,26 @@ const commonConfig = {
 		})
 	],
 	resolve: {
-		extensions: ['.ts', '.js'],
+		extensions: [
+			'.ts',
+			'.js'
+		],
+		mainFields: ['main'],
 		modules: [
-				ROOT,
-				'node_modules'
+			ROOT,
+			'node_modules'
 		]
 	}
 };
 const browserConfig = _.cloneDeep(commonConfig);
 browserConfig.target = 'web';
 browserConfig.output.filename = 'quaesitor-broswer.js';
+browserConfig.output.libraryTarget = 'var';
+browserConfig.plugins.push(new esmPlugin({
+	exclude(fileName, chunk){
+		return(!/\.[cm]?js$/i.test(fileName));
+	}
+}));
 const nodeConfig = _.cloneDeep(commonConfig);
 nodeConfig.externals.push(nodeExternals());
 nodeConfig.output.filename = 'quaesitor-node.js';
