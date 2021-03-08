@@ -2,7 +2,6 @@
 const LRUCache = require('mnemonist/lru-cache'); /* an import statement causes problems */
 /* imports from module */
 import { Classifier } from './classifier';
-import { Classifiers } from './model';
 import { Extractor } from './extractor';
 import { RegularExpression, bufferCapture, insertSpace } from './regular-expression';
 import { ScientificName } from './scientific-name';
@@ -145,13 +144,13 @@ export class Quaesitor {
 	private formatSpecies(g: string, s: string): string {
 		return(g + ' ' + s);
 	}
-	public async loadClassifiers(x: Classifiers): Promise<void> {
-		this.classifier.load(x);
+	public async loadClassifiers(): Promise<void> {
+		this.classifier.load();
 	}
 	private async queryBinomial(x: string, y: string): Promise<boolean> {
 		const z = this.formatSpecies(x, y).toLowerCase();
 		if(this.queryCacheBinomial.has(z) === true){
-			return(this.queryCacheBinomial.get(z));
+			return(this.queryCacheBinomial.get(z) as boolean);
 		} else if(await this.classifier.queryKLUGE(z) === 1){
 			this.queryCacheBinomial.set(z, false);
 			return(false);
@@ -164,7 +163,7 @@ export class Quaesitor {
 	private async queryUninomial(x: string): Promise<boolean> {
 		const y = x.toLowerCase();
 		if(this.queryCacheUninomial.has(y) === true){
-			return(this.queryCacheUninomial.get(y));
+			return(this.queryCacheUninomial.get(y) as boolean);
 		} else {
 			const r: boolean = await this.classifier.queryUEDFFNN(await this.classifier.queryEnsemble(x));
 			this.queryCacheUninomial.set(y, r);

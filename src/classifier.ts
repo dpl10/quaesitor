@@ -1,27 +1,50 @@
 /* imports from node_modules */
 const LRUCache = require('mnemonist/lru-cache'); /* an import statement causes problems */
-//#ifdef NODE
-import * as tf from '@tensorflow/tfjs-node';
-import { Tensor } from '@tensorflow/tfjs-node';
-//#else
-import * as tf from '@tensorflow/tfjs';
-import { Tensor } from '@tensorflow/tfjs';
-//#endif
+import * as tf from '@tensorflow/tfjs-node'; /* changed to tfjs post build for online version */
+import { InferenceModel, Tensor } from '@tensorflow/tfjs'; /* type definitions only, so source doesnt matter for speed */
 import { LTTB, XYDataPoint } from 'downsample';
 /* imports from module */
 import { BloomFilter } from './bloom-filter';
-import { Classifiers, Model, ModelKey } from './model';
-import { Flatten } from './flatten';
-import { RegularExpression } from './regular-expression';
 import { c2i, injectivePhones, phones } from './encoder';
+import { Flatten } from './flatten';
+import { Model, ModelKey } from './model';
 import { pseudosyllables } from './pseudosyllables';
-/* imports from (webpacked) assets */
-const modelJSON = new Model();
-modelJSON.bedffnn.json = require('./assets/bedffnn.json');
-modelJSON.ecnn.json = require('./assets/ecnn.json');
-modelJSON.lcnn.json = require('./assets/lcnn.json');
-modelJSON.pdffnn.json = require('./assets/pdffnn.json');
-modelJSON.uedffnn.json = require('./assets/uedffnn.json');
+import { RegularExpression } from './regular-expression';
+/* imports from assets */
+const classifiers = new Model();
+// @ts-ignore esbuild LOADER fixes this
+import b from './assets/bedffnn.json';
+classifiers.bedffnn.json = b;
+// @ts-ignore esbuild LOADER fixes this
+import e from './assets/ecnn.json';
+classifiers.ecnn.json = e;
+// @ts-ignore esbuild LOADER fixes this
+import l from './assets/lcnn.json';
+classifiers.lcnn.json = l;
+// @ts-ignore esbuild LOADER fixes this
+import p from './assets/pdffnn.json';
+classifiers.pdffnn.json = p;
+// @ts-ignore esbuild LOADER fixes this
+import u from './assets/uedffnn.json';
+classifiers.uedffnn.json = u;
+// @ts-ignore esbuild LOADER fixes this
+import B from './assets/bedffnn.pbf';
+classifiers.bedffnn.rawModel = B;
+// @ts-ignore esbuild LOADER fixes this
+import E from './assets/ecnn.pbf';
+classifiers.ecnn.rawModel = E;
+// @ts-ignore esbuild LOADER fixes this
+import L from './assets/lcnn.pbf';
+classifiers.lcnn.rawModel = L;
+// @ts-ignore esbuild LOADER fixes this
+import P from './assets/pdffnn.pbf';
+classifiers.pdffnn.rawModel = P;
+// @ts-ignore esbuild LOADER fixes this
+import U from './assets/uedffnn.pbf';
+classifiers.uedffnn.rawModel = U;
+// @ts-ignore esbuild LOADER fixes this
+import F from './assets/bf.pbf';
+classifiers.bf.rawModel = F;
 /* speed (maybe) */
 tf.enableProdMode();
 export class Classifier {
@@ -30,22 +53,23 @@ export class Classifier {
 	private model: Model = new Model();
 	private queryCache = new LRUCache(8192); /* LRUCache<string, Float32Array> */
 	private regularExpression: RegularExpression = new RegularExpression();
-	public async load(x: Classifiers): Promise<void> {
+	public async load(): Promise<void> {
 		for(const m in this.model){
 			if((m === 'bedffnn') || (m === 'ecnn') || (m === 'lcnn') || (m === 'pdffnn') || (m === 'uedffnn')){
 				this.model[m].model = await tf.loadLayersModel({
 					load: async () => {
 						return({
-							convertedBy: modelJSON[m].json.convertedBy,
-							format: modelJSON[m].json.format,
-							generatedBy: modelJSON[m].json.generatedBy,
-							modelTopology: modelJSON[m].json.modelTopology,
-							userDefinedMetadata: modelJSON[m].json.userDefinedMetadata,
-							weightData: x[m].buffer.slice(x[m].byteOffset, x[m].byteLength+x[m].byteOffset), /* thank you Stéphane (https://stackoverflow.com/a/54646864) */
-							weightSpecs: modelJSON[m].json.weightsManifest[0].weights
+							convertedBy: classifiers[m].json.convertedBy,
+							format: classifiers[m].json.format,
+							generatedBy: classifiers[m].json.generatedBy,
+							modelTopology: classifiers[m].json.modelTopology,
+							userDefinedMetadata: classifiers[m].json.userDefinedMetadata,
+							weightData: classifiers[m].rawModel.buffer.slice(classifiers[m].rawModel.byteOffset, classifiers[m].rawModel.byteLength+classifiers[m].rawModel.byteOffset), /* thank you Stéphane (https://stackoverflow.com/a/54646864) */
+							weightSpecs: classifiers[m].json.weightsManifest[0].weights
 						});
 					}
-				});
+				}) as InferenceModel;
+				// @ts-ignore: InferenceModel has getLayer... really
 				this.model[m].width = this.model[m].model.getLayer('inputLayer').batchInputShape[1];
 				const y = this.model[m].inputInt ? new Int32Array(this.model[m].width).fill(0) : new Float32Array(this.model[m].width).fill(0);
 				const p = this.model[m].model.predict(tf.tensor2d(y, [1, this.model[m].width]), {
@@ -56,7 +80,7 @@ export class Classifier {
 					this.model[m].loaded = true;
 				}
 			} else if(m === 'bf'){
-				this.model.bf.loaded = this.bf.load(x.bf, 0);
+				this.model.bf.loaded = this.bf.load(classifiers.bf.rawModel, 0);
 			}
 		}
 		this.model.kluge.loaded = this.bf.loadArray(new Uint32Array([1283416317, 3387457439, 4209112991, 3520002074, 1144686426, 3155412713, 3592297154, 308830083, 1130612061, 730418870, 1038915210, 3374557547, 3720788671, 2190049136, 1618358991, 1168865259, 752622717, 545310520, 1130253422, 1209003497, 987597691, 1459847669, 3070958455, 529761981, 1228838247, 978740476, 2520715720, 1415304893, 4070213315, 121028745, 4110337836, 712147284, 1337470519, 1111897967, 3023169381, 650969950, 392970344, 1894424605, 1584273708, 3829791236, 1775660966, 1325403779, 3364746613, 143827330, 2522860555, 278220957, 37677879, 1754752414, 175190658, 3604261002, 3121375234, 621027444, 1679379711, 3857678238, 3962210137, 1385103514, 3995533402, 4013474193, 3302042558, 4216881175]), 20, 1920, 1);
@@ -225,7 +249,7 @@ export class Classifier {
 		const y: string = this.flatten.squash(x).replace(this.regularExpression.antiASCIIlowerCase, ' ').replace(this.regularExpression.leadingSpace, '').replace(this.regularExpression.trailingSpace, '');
 		const q: Float32Array = new Float32Array(this.model.uedffnn.width).fill(0);
 		if(this.queryCache.has(y) === true){
-			return(this.queryCache.get(y));
+			return(this.queryCache.get(y) as Float32Array);
 		} else if(await this.queryKLUGE(y) === 1){
 			this.queryCache.set(y, q);
 			return(q);

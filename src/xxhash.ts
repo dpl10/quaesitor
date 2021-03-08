@@ -1,9 +1,5 @@
 /* imports from node_modules */
-//#ifdef NODE
-const xxhash = require('xxhash-wasm/cjs/xxhash-wasm'); /* an import statement causes problems */
-//#else
-const xxhash = require('xxhash-wasm/umd/xxhash-wasm'); /* an import statement causes problems */
-//#endif
+import xxhash from 'xxhash-wasm';
 interface XXhashType {
 	h32: Function;
 	h64: Function;

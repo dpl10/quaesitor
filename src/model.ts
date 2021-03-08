@@ -1,16 +1,13 @@
 /* imports from node_modules */
-//#ifdef NODE
-import { InferenceModel } from '@tensorflow/tfjs-node';
-//#else
-import { InferenceModel } from '@tensorflow/tfjs';
-//#endif
+import { InferenceModel } from '@tensorflow/tfjs'; /* type definition only, so source doesnt matter for speed */
 export class Properties {
-	[key: string]: InferenceModel|boolean|number|string;
+	[key: string]: any;
 	inputInt: boolean;
 	json?: any;
 	loaded: boolean;
-	model?: InferenceModel|any;
+	model?: InferenceModel;
 	network: boolean;
+	rawModel?: Uint8Array;
 	width: number;
 }
 export class Model {
@@ -68,13 +65,3 @@ export class Model {
 	uedffnn: Properties;
 }
 export type ModelKey = 'bedffnn'|'bf'|'ecnn'|'kluge'|'lcnn'|'pdffnn'|'uedffnn';
-export class Classifiers {
-	[key: string]: any;
-	bedffnn: any;
-	bf: ArrayBuffer;
-	ecnn: any;
-	kluge?: Uint32Array;
-	lcnn: any;
-	pdffnn: any;
-	uedffnn: any;
-}
